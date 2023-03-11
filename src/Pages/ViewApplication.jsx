@@ -29,7 +29,7 @@ const breadcrumbs = [
   },
   {
     id: 1,
-    name: "All History",
+    name: "View Application",
     url: "#",
   },
   {
@@ -93,7 +93,7 @@ function ViewApplication({ user }) {
   }, []);
   return (
     <MainWrapper>
-      <Sidebar title="View History" breadcrumb={breadcrumbs}>
+      <Sidebar title="View Application" breadcrumb={breadcrumbs}>
         {pageLoading ? (
           <ComponentLoader height="300px" />
         ) : (

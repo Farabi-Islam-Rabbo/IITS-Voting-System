@@ -43,6 +43,12 @@ import AllProgramCreate from './Pages/AllProgramCreate'
 import CreateUserType from './Pages/CreateUserType'
 import AllCreateStudent from './Pages/AllCreateStudent'
 import CreateStudent from './Pages/CreateStudent'
+import AllVotingPannel from './Pages/AllVotingPannel'
+import UpdateCommitteeee from './Pages/UpdateCommitteeee'
+import UpdateWing from './Pages/UpdateWing'
+import UpdatePost from './Pages/UpdatePost'
+import UpdateUserType from './Pages/UpdateUserType'
+import UpdateProgram from './Pages/UpdateProgram'
 
 const routes = [
   {
@@ -80,6 +86,36 @@ const routes = [
     exact: true,
     name: 'Create Committee',
     component: CreateCommittee,
+  },
+  {
+    path: '/update-committee/:id',
+    exact: true,
+    name: 'Update Committee',
+    component: UpdateCommitteeee,
+  },
+  {
+    path: '/update-wing/:id',
+    exact: true,
+    name: 'Update wing',
+    component: UpdateWing,
+  },
+  {
+    path: '/update-post/:id',
+    exact: true,
+    name: 'Update Post',
+    component: UpdatePost,
+  },
+  {
+    path: '/update-user-type/:id',
+    exact: true,
+    name: 'Update User-Type',
+    component: UpdateUserType,
+  },
+  {
+    path: '/update-program/:id',
+    exact: true,
+    name: 'Update Program',
+    component: UpdateProgram,
   },
   {
     path: '/create-wing',
@@ -188,6 +224,12 @@ const routes = [
     exact: true,
     name: 'Create User',
     component: AllRequestPage,
+  },
+  {
+    path: '/voting-pannel',
+    exact: true,
+    name: 'Voting Pannel',
+    component: AllVotingPannel,
   },
   {
     path: '/view-request/:id',

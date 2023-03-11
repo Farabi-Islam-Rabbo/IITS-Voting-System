@@ -89,98 +89,91 @@ function RegistrationPage(props) {
     }
   };
 
-  useEffect(() => {
-    if (history) {
-      //checkLoginStatus();
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (history) {
+  //     //checkLoginStatus();
+  //   }
+  // }, [navigate]);
 
-  const accountTypes = [
-    {
-      label: "Cultural Wing",
-      value: "cultural wing",
-    },
-    {
-      label: "Event Wing",
-      value: "event wing",
-    },
-  ];
+  // const accountTypes = [
+  //   {
+  //     label: "Cultural Wing",
+  //     value: "cultural wing",
+  //   },
+  //   {
+  //     label: "Event Wing",
+  //     value: "event wing",
+  //   },
+  // ];
 
   return (
     <MainWrapper hideHeader>
       <div className="flex flex-wrap w-full">
-        <div className="flex flex-col w-full md:w-1/2">
-          <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
-            <p className="text-3xl text-center">IUBAT IT SOCIETY</p>
-            <div className="flex flex-col pt-3 md:pt-8">
+        <div className="flex flex-col w-full">
+          <div className="container mx-auto">
+
+            <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
+               <p className="text-3xl text-center">Registration Form</p>
+              <div className="flex flex-col pt-3 md:pt-8">
+              
+            
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
+              <InputField
                 required
+                id="id"
                 label="ID"
-                placeholder="ID"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
+                placeholder="id"
+                type="text"
+                value={name}
+                onChange={(data) => setName(data)}
+                errorMessage={formError?.name}
               />
             </div>
+            
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="Name"
-                placeholder="Name"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
+                <span className="mt-5">
+                    Name:
+                </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="CGPA"
-                placeholder="CGPA"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
+                <span className="mt-5">
+                    CGPA:
+                </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="Program"
-                placeholder="Program"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
+                <span className="mt-5">
+                    Program:
+                </span>
             </div>
+            
+            
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
+              <InputField
                 required
+                id="email"
                 label="Email"
-                placeholder="Email"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
+                placeholder="email"
+                type="text"
+                value={name}
+                onChange={(data) => setName(data)}
+                errorMessage={formError?.name}
               />
             </div>
+            
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
+              <InputField
                 required
-                label="Contuct Number"
-                placeholder="Contuct Number"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
+                id="contuct number"
+                label="Contact Number"
+                placeholder="contact number"
+                type="text"
+                value={name}
+                onChange={(data) => setName(data)}
+                errorMessage={formError?.name}
               />
             </div>
 
-              <div className="flex flex-col pt-4">
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <InputField
                   required
                   id="email"
@@ -192,12 +185,12 @@ function RegistrationPage(props) {
                   onChange={(data) => setPassword(data)}
                   errorMessage={formError?.password}
                 />
-              </div>
+            </div>
               
 
               <ButtonWithLoading
                 loading={loading}
-                className="p-2 mt-6 text-lg font-bold text-white bg-black hover:bg-gray-700"
+                className="p-2 mt-6 text-lg font-bold text-white bg-black hover:bg-gray-700 "
                 title="Register Here"
                 onClick={() => loginUser()}
                 type="submit"
@@ -205,14 +198,15 @@ function RegistrationPage(props) {
             </div>
           </div>
         </div>
+        </div>
 
-        <div className="w-1/2 shadow-2xl">
+        {/* <div className="w-1/2 shadow-2xl">
           <img
             alt="coursology login"
             className="hidden object-cover w-full h-screen md:block"
             src={iubat2}
           />
-        </div>
+        </div> */}
       </div>
     </MainWrapper>
   );

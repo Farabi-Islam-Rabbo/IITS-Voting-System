@@ -69,54 +69,11 @@ function AllProgramCreate({ user, na }) {
   const AccessTableHeader = React.useMemo(
     () => [
       {
-        Header: "Name",
+        Header: "Program Title",
         accessor: (data) => data?.name,
         type: "text",
       },
-      {
-        Header: "Email",
-        accessor: (data) => data?.email,
-        type: "text",
-      },
-      {
-        Header: "Account Type",
-        accessor: (data) => {
-          return (
-            <div className="flex text-center">
-              <span
-                className={`text-center capitalize text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.accountType === "personal"
-                    ? "bg-purple-100 text-purple-800"
-                    : "bg-golden-200 text-green-800"
-                }`}
-              >
-                {data?.accountType}
-              </span>
-            </div>
-          );
-        },
-        type: "text",
-      },
-      {
-        Header: "Status",
-        accessor: (data) => {
-          return (
-            <div className="flex text-center">
-              <span
-                className={`text-center text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.activeStatus
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {data?.activeStatus ? "Active" : "Inactive"}
-              </span>
-            </div>
-          );
-        },
-        type: "text",
-      },
-
+     
       {
         Header: "Action",
         accessor: (data) => (
@@ -146,7 +103,7 @@ function AllProgramCreate({ user, na }) {
               </svg>
             </Link>
             <Link
-              to={`/update-user/${data?._id}`}
+              to={`/update-program/${data?._id}`}
               // onClick={() => toggleUpdate(data)}
               className="p-1 text-sm font-bold text-white bg-blue-600 rounded hover:bg-blue-500"
             >
@@ -250,7 +207,7 @@ function AllProgramCreate({ user, na }) {
   return (
     <MainWrapper>
       <AdminSideBar
-        title="Program"
+        title="Update Program"
         breadcrumb={breadcrumbs}
         buttonHref={"/create-program"}
         buttonTitle="Create Program"

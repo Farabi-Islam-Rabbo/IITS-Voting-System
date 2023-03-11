@@ -23,13 +23,13 @@ function Header(props) {
   };
 
   return (
-    <nav className="fixed z-50 w-full py-4 shadow-md bg-secondary-700">
+    <nav className="fixed z-50 w-full py-4 shadow-md bg-blue-900">
       <div className="flex items-center justify-between px-4 mx-auto xl:max-w-full lg:max-w-full md:max-w-3xl md:px-2 xl:px-2 lg:px-2">
         <section className="flex items-center space-x-2 text-gray-900">
           <Link to="/">
             {/* <img src={logo} className="h-10 pl-4" alt="coursology logo" /> */}
             <h1 className="text-white text-3xl font-bold">
-              IUBAT <span className="text-primary">IT SOCIETY</span>
+              IUBAT <span className="text-primary"> IT SOCIETY</span>
             </h1>
           </Link>
         </section>

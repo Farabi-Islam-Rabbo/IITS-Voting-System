@@ -2,15 +2,13 @@ import React, { useCallback, useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { useState } from "react";
 import {
-  AdminSideBar,
   ButtonWithLoading,
   CreateUserModal,
   FileUploadField,
   InputField,
   MainWrapper,
   SelectField,
-  Sidebar,
-  TextAreaField
+  AdminSideBar,
 } from "../Components";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,7 +24,6 @@ import { Avatar } from "../common/images";
 import { toast } from "react-toastify";
 import { countries } from "../Assets/_mocks/CountryList";
 import CreatableSelectField from "../Components/Common/CreatableSelectField";
-
 // import ComponentLoader from "../components/Loader/ComponentLoader";
 // import { Link } from "react-router-dom";
 
@@ -38,24 +35,24 @@ const breadcrumbs = [
   },
   {
     id: 1,
-    name: "Create Student",
-    url: "/create-student",
+    name: "Users",
+    url: "/users",
   },
   {
     id: 1,
-    name: "Create Student",
-    url: "/create-student",
+    name: "Update User",
+    url: "/update-user",
   },
 ];
 
 const accountTypes = [
   {
-    label: "Cultural Wing",
-    value: "cultural wing",
+    label: "Personal",
+    value: "personal",
   },
   {
-    label: "Event Wing",
-    value: "event wing",
+    label: "Business",
+    value: "business",
   },
 ];
 
@@ -117,7 +114,7 @@ const genders = [
   },
 ];
 
-function CreateStudent({ user }) {
+function UpdateWing({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
@@ -248,150 +245,20 @@ function CreateStudent({ user }) {
   };
   return (
     <MainWrapper>
-      <AdminSideBar title="Create Application" breadcrumb={breadcrumbs}>
+      <AdminSideBar title="Update Wing" breadcrumb={breadcrumbs}>
         <div className="flex flex-col px-4 py-6 pt-3 mt-4 bg-white rounded md:pt-3 mx-auto">
           <>
             <div className="flex items-center justify-between py-2 border-b-2">
               <span className="font-bold capitalize">
-               Fillup The Application Form
+                Wing Basic Information
               </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="Select Wing"
-                placeholder="Select Wing"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="Select Post"
-                placeholder="Select Post"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="name"
-                label="Name"
-                placeholder="name"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="Student ID"
-                placeholder="Student id"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="FB URL"
-                placeholder="fb url"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="Current Association"
-                placeholder="true/false"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <TextAreaField
-                required
-                id="name"
-                label="Association Detail"
-                placeholder="association detail"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="Past Experience"
-                placeholder="past experience"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <TextAreaField
-                required
-                id="name"
-                label="Reason"
-                placeholder="why"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <TextAreaField
-                required
-                id="name"
-                label="How You Serve IITS"
-                placeholder="--"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <TextAreaField
-                required
-                id="name"
-                label="Strength"
-                placeholder="--"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <TextAreaField
-                required
-                id="name"
-                label="Weakness"
-                placeholder="--"
+                label="Wing Title"
+                placeholder="wing title"
                 type="text"
                 value={name}
                 onChange={(data) => setName(data)}
@@ -405,7 +272,7 @@ function CreateStudent({ user }) {
           <ButtonWithLoading
             loading={loading}
             className="p-2 mt-8 text-lg font-bold text-white bg-primary hover:bg-green-700 rounded"
-            title="Submit Your Application"
+            title="Update Wing"
             onClick={handleSubmit}
             type="submit"
           />
@@ -421,4 +288,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(CreateStudent);
+export default connect(mapStateToProps)(UpdateWing);

@@ -28,46 +28,46 @@ const accessMainList = [
     icon: <BsReverseLayoutSidebarReverse />,
   },
   {
-    title: 'Users',
-    url: '/users',
-    icon: <BsCardList />,
-    access: 'usersManagement',
-  },
-  {
-    title: 'Committee',
-    url: '/committee',
-    icon: <BsCardList />
-  },
-  {
-    title: 'Wing',
-    url: '/wing',
-    icon: <BsCardList />
-  },
-  {
-    title: 'Post',
-    url: '/post',
-    icon: <BsCardList />
-  },
-  {
-    title: 'Application',
-    url: '/application',
-    icon: <BsCardList />
-  },
-  {
     title: 'User Type',
     url: '/user-type',
-    icon: <BsCardList />
+    icon: <BsBag />
   },
   {
     title: 'Program',
     url: '/program',
-    icon: <BsCardList />
+    icon: <BsEye />
+  },
+  // {
+  //   title: 'Users',
+  //   url: '/users',
+  //   icon: <BsCardList />,
+  //   access: 'usersManagement',
+  // },
+  {
+    title: 'Committee',
+    url: '/committee',
+    icon: <BsChatDots />
+  },
+  {
+    title: 'Wing',
+    url: '/wing',
+    icon: <BsPencilSquare />
+  },
+  {
+    title: 'Post',
+    url: '/post',
+    icon: <BsReply />
   },
   {
     title: 'Student',
     url: '/student',
-    icon: <BsCardList />
+    icon: <BsPerson />
   },
+  {
+    title: 'Application',
+    url: '/application',
+    icon: <BsTools />
+  }
 ]
 
 function AdminSidebar({
@@ -91,9 +91,9 @@ function AdminSidebar({
   console.log('user====', user)
   return (
     <div className="relative w-full min-h-screen px-2 md:flex">
-      <div className="fixed absolute inset-y-0 left-0 w-48 px-2 space-y-6 text-blue-100 transition duration-200 ease-in-out transform -translate-x-full bg-gray-100 sidebar py-7 md:relative md:translate-x-0">
+      <div className="absolute inset-y-0 left-0 w-48 px-2 space-y-6 text-blue-100 transition duration-200 ease-in-out transform -translate-x-full bg-gray-100 sidebar py-7 md:relative md:translate-x-0">
         <p key="weqqqw" className="pt-4 mb-0 text-2xl text-gray-900">
-          Start
+          IITS
         </p>
         <div className="mt-0" key="weqsqqw">
           {accessMainList
@@ -114,7 +114,7 @@ function AdminSidebar({
         </div>
 
         <p key="weqcqqw" className="pt-4 mb-0 text-2xl text-gray-900">
-          Account
+          
         </p>
         <nav className="mt-0" key="weqdqqw"></nav>
       </div>
