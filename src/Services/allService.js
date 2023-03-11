@@ -1,5 +1,14 @@
 import { getApi, postApi, postFormData, putApi } from "./api/index";
 
+
+// Get UnRegistered Student
+
+export const GetAllUnRegisteredStudentId = () => getApi("GetUnregisteredStudentId");
+export const GetStudentDetailsById = (id) => getApi(`GetStudentById/${id}`);
+export const Register = (data) => postApi("api/Auth/register", data);
+export const Login = (id, pass) => postApi(`api/Auth/Login/${id}/${pass}`);
+export const VerifyOtp = (data) => postApi("api/Auth/VerifyOTP",data)
+
 //auth
 export const AdminLogin = (data) => postApi("auth/admin-login", data);
 

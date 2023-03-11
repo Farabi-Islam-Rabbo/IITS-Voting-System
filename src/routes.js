@@ -49,6 +49,7 @@ import UpdateWing from './Pages/UpdateWing'
 import UpdatePost from './Pages/UpdatePost'
 import UpdateUserType from './Pages/UpdateUserType'
 import UpdateProgram from './Pages/UpdateProgram'
+import OtpPage from './Pages/OtpPage'
 
 const routes = [
   {
@@ -56,6 +57,12 @@ const routes = [
     exact: true,
     name: 'Login',
     component: LoginPage,
+  },
+  {
+    path: '/otp',
+    exact: true,
+    name: 'Otp',
+    component: OtpPage,
   },
   {
     path: '/forgot-password',

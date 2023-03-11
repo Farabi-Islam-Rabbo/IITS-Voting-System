@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { duckOperations } from "../Redux/Main/index";
 import { ButtonWithLoading, InputField, MainWrapper,SelectField } from "../Components";
 import { iubat2 } from "../common/images";
-import { AdminLogin } from "../Services/allService";
+import { AdminLogin, GetAllUnRegisteredStudentId, GetStudentDetailsById, Register } from "../Services/allService";
 import { getParamsUrlData } from "../common/utility";
 import { toast } from "react-toastify";
 
@@ -22,6 +22,8 @@ function RegistrationPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState({});
+  const [studentDetails, setStudentDetails] = useState({});
+  const [allStudentId, setAllStudentId] = useState([]);
   const [accountType, setAccountType] = useState({
     label: "Business",
     value: "business",
@@ -32,50 +34,70 @@ function RegistrationPage(props) {
     let emailValidator =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!values.email.match(emailValidator))
+    if (!values?.email?.match(emailValidator))
       errors.email = "Invalid email address !";
 
-    if (!values.password) errors.password = "Password must be 8 digit long! !";
+    if (!values?.password) errors.password = "Password must be 8 digit long! !";
+    if (!values?.phoneNumber) errors.phoneNumber = "Provide Phone Number! !";
+    if (!values?.id) errors.phoneNumber = "Please select Id! !";
 
     return errors;
   };
 
+  useEffect(()=> {
+    getAllUnregisteredStudentId()
+  },[])
+
+  const getAllUnregisteredStudentId = async() => {
+    const response = await GetAllUnRegisteredStudentId();
+    const tempId = [];
+
+    response?.map((e=>{
+      tempId.push({
+        label: e,
+        value: e
+      })
+    }))
+    tempId?.length > 0 ? setAllStudentId(tempId) : setAllStudentId([])
+  }
+
+  const idHandler = async(data) => {
+    if(data?.label?.length == 8){
+      console.log(true)
+      const response = await GetStudentDetailsById(data?.label)
+      setPhoneNumber(response?.contactNo)
+      setStudentDetails(response)
+    }else{
+
+    }
+  }
+
   const loginUser = async () => {
     let FormData = {
-      email,
-      password,
+      studentInfoId:studentDetails?.id,
+      userId: studentId?.value,
+      otpContact: phoneNumber,
+      password: password,
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await AdminLogin(FormData);
-    const { status, message, data } = response;
+    console.log(FormData)
+    const response = await Register(FormData);
+    //const { status, message, data } = response;
 
     console.log(response);
     setLoading(false);
-    if (status) {
-      localStorage.setItem("auth_token", data.token);
-      const redirect = getParamsUrlData();
-      const user = jwtDecode(data.token);
-      setUser(user);
-      console.log("redirect====", redirect.redirect)
-      if (redirect.redirect) {
-        navigate(`/${redirect.redirect}`);
-      } else {
-      console.log("user====",user);
-
-        if(user?.userType == 'super_admin'){
-          console.log("from admin")
-          navigate("/admin-dashboard");
-        }
-        if(user?.userType == 'sub-admin'){
-          navigate("/dashboard");
-        }
-      }
+    if (response?.id) {
+      toast("Registration Successfull", {
+        type: "success",
+      });
+      navigate("/login");
+      
     } else {
-      toast(message, {
+      toast("Registration Failed", {
         type: "error",
       });
     }
@@ -161,31 +183,34 @@ function RegistrationPage(props) {
                 label="Id"
                 placeholder="Select Id"
                 value={studentId}
-                onChange={(data) => setStudentId(data)}
+                onChange={(data) => {
+                  setStudentId(data)
+                  idHandler(data)
+                }}
                 errorMessage={formError?.accountType}
-                selectOptions={segmentList}
+                selectOptions={allStudentId}
               />
               </div>
             
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
-                    Name:
+                    Name: {studentDetails?.name}
                 </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
-                    CGPA:
+                    CGPA: {studentDetails?.cgpa}
                 </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
-                    Email:
+                    Email: {studentDetails?.email}
                 </span>
             </div>
 
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
-                    Program:
+                    Program: {studentDetails?.program}
                 </span>
             </div>
             
