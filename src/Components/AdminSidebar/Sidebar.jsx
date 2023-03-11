@@ -37,12 +37,12 @@ const accessMainList = [
     url: '/program',
     icon: <BsEye />
   },
-  // {
-  //   title: 'Users',
-  //   url: '/users',
-  //   icon: <BsCardList />,
-  //   access: 'usersManagement',
-  // },
+  {
+    title: 'Users',
+    url: '/users',
+    icon: <BsCardList />,
+    access: 'usersManagement',
+  },
   {
     title: 'Committee',
     url: '/committee',

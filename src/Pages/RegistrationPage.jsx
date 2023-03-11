@@ -16,6 +16,9 @@ function RegistrationPage(props) {
   const { setUser } = props;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [studentId,setStudentId] = useState("")
+  const [phoneNumber,setPhoneNumber] = useState("")
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState({});
@@ -89,6 +92,29 @@ function RegistrationPage(props) {
     }
   };
 
+  const segmentList = [
+    {
+      label: "17103162",
+      value: "17103162",
+    },
+    {
+      label: "18103149",
+      value: "18103149",
+    },
+    {
+      label: "18106670",
+      value: "18106670",
+    },
+    {
+      label: "16203001",
+      value: "16203001",
+    },
+    {
+      label: "19103162",
+      value: "19103162",
+    },
+  ];
+
   // useEffect(() => {
   //   if (history) {
   //     //checkLoginStatus();
@@ -117,18 +143,29 @@ function RegistrationPage(props) {
               <div className="flex flex-col pt-3 md:pt-8">
               
             
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+            {/* <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="id"
                 label="ID"
                 placeholder="id"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={studentId}
+                onChange={(data) => setStudentId(data)}
                 errorMessage={formError?.name}
               />
-            </div>
+            </div> */}
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+            <SelectField
+                required
+                label="Id"
+                placeholder="Select Id"
+                value={studentId}
+                onChange={(data) => setStudentId(data)}
+                errorMessage={formError?.accountType}
+                selectOptions={segmentList}
+              />
+              </div>
             
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
@@ -142,12 +179,18 @@ function RegistrationPage(props) {
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
+                    Email:
+                </span>
+            </div>
+
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+                <span className="mt-5">
                     Program:
                 </span>
             </div>
             
             
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+            {/* <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="email"
@@ -158,7 +201,7 @@ function RegistrationPage(props) {
                 onChange={(data) => setName(data)}
                 errorMessage={formError?.name}
               />
-            </div>
+            </div> */}
             
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
@@ -167,8 +210,8 @@ function RegistrationPage(props) {
                 label="Contact Number"
                 placeholder="contact number"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={phoneNumber}
+                onChange={(data) => setPhoneNumber(data)}
                 errorMessage={formError?.name}
               />
             </div>
