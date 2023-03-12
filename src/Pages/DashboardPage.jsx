@@ -20,6 +20,7 @@ const breadcrumbs = [
 ];
 
 function DashBoard({ user }) {
+  console.log("Shakil");
   console.log(user);
 
   return (

@@ -50,9 +50,9 @@ function OtpPage(props) {
     const response = await VerifyOtp(FormData);
     //const { status, message, data } = response;
 
-    console.log(response);
+    //console.log(response);
     setLoading(false);
-    if (response?.status) {
+    if (response?.statusCode===200) {
       navigate("/dashboard");
     } else {
       toast("Verification Failed", {
