@@ -39,6 +39,7 @@ const breadcrumbs = [
 ];
 
 function AllApp({ user, na }) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [licenceUpdateLoading, setLicenceUpdateLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -247,6 +248,10 @@ function AllApp({ user, na }) {
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  if (!user) {
+    navigate("/login");
+  }
 
   return (
     <MainWrapper>

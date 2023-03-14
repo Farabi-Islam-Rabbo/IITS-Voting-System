@@ -9,6 +9,36 @@ export const Register = (data) => postApi("api/Auth/register", data);
 export const Login = (id, pass) => postApi(`api/Auth/Login/${id}/${pass}`);
 export const VerifyOtp = (data) => postApi("api/Auth/VerifyOTP",data)
 
+// Program 
+export const CreatePrograms = (data) => postApi("api/Programs",data)
+export const GetAllPrograms = () => getApi("GetAllPrograms")
+export const GetProgramDetailsById = (id) => getApi(`api/Programs/${id}`);
+export const UpdatePrograms = (id, data) => putApi(`api/Programs/${id}`, data);
+
+// Committee
+export const CreateNewCommittee = (data) => postApi("api/Committees",data)
+export const GetAllCommittee = () => getApi("GetAllCommittees")
+export const GetCommitteeDetailsById = (id) => getApi(`api/Committees/${id}`);
+export const UpdateCommitteee = (id, data) => putApi(`api/Committees/${id}`, data);
+
+// Wing
+export const CreateNewWing = (data) => postApi("api/wings",data)
+export const GetAllWing = () => getApi("GetAllWings")
+export const GetWingDetailsById = (id) => getApi(`api/wings/${id}`);
+export const UpdateWings = (id, data) => putApi(`api/wings/${id}`, data);
+export const GetAllActiveWing = () => getApi("GetAllActiveWings")
+
+// Post
+export const CreateNewPost = (data) => postApi("api/Posts",data)
+export const GetAllPost = () => getApi("GetAllPost")
+export const GetPostDetailsById = (id) => getApi(`api/Posts/GetPostById/${id}`);
+export const UpdatePosts = (id, data) => putApi(`api/Posts/${id}`, data);
+export const GetAllActivePost = () => getApi("GetAllActivePost")
+export const GetPostsByWingId = (id) => getApi(`api/Posts/GetPostsByWingId/${id}`)
+
+
+
+
 //auth
 export const AdminLogin = (data) => postApi("auth/admin-login", data);
 

@@ -14,8 +14,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import {
   CreateUser,
-  GetAllUser,
-  GetPermissionList,
+  GetAllActiveWing,
+  GetPostsByWingId,
   GetPermissionListByType,
   UploadFile,
 } from "../Services/allService";
@@ -58,109 +58,27 @@ const accountTypes = [
   },
 ];
 
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
 
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function CreateApplication({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [activeStatus, setActiveStatus] = useState(null);
-  const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
-    label: "Business",
-    value: "business",
-  });
-  const [fullName, setFullName] = useState(null);
-  const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
-  const [documentId, setDocumentId] = useState(null);
-  const [documentIssueDate, setDocumentIssueDate] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [contactNumber, setContactNumber] = useState(null);
-  const [city, setCity] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [placeOfBirth, setPlaceOfBirth] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [country, setCountry] = useState(null);
-  const [documentExpireDate, setDocumentExpireDate] = useState(null);
-  const [referencePersonId, setReferencePersonId] = useState(null);
-  const [referencePersonName, setReferencePersonName] = useState(null);
-  const [referencePersonRelation, setReferencePersonRelation] = useState(null);
-  const [organizationName, setOrganizationName] = useState(null);
-  const [orgBankAccountNo, setOrgBankAccountNo] = useState(null);
-  const [recordNumber, setRecordNumber] = useState(null);
-  const [businessEmail, setBusinessEmail] = useState(null);
-  const [businessClass, setBusinessClass] = useState(null);
-  const [segment, setSegment] = useState(null);
-  const [businessType, setBusinessType] = useState(null);
-  const [licenseNumber, setLicenseNumber] = useState(null);
-  const [licenseIssueDate, setLicenseIssueDate] = useState(null);
-  const [licenseExpireDate, setLicenseExpireDate] = useState(null);
+  const [wing, setWing] = useState([]);
+  const [post, setPost] = useState([]);
+  const [fbUrl, setFbUrl] = useState("");
+  const [currentAsso, setCurrentAsso] = useState("");
+  const [assoDetail, setAssoDetail] = useState("");
+  const [pastExp, setPastExp] = useState("");
+  const [reason, setReason] = useState("");
+  const [serveIits, setServeIits] = useState("");
+  const [strength, setStrength] = useState("");
+  const [weakness, setWeakness] = useState("");
   const [formError, setFormError] = useState({});
-
-  const [photoLoading, setPhotoLoading] = useState(false);
+  const [accountType, setAccountType] = useState(null);
   
 
-  const [permissionList, setPermissionList] = useState("");
-  const [permission, setPermission] = useState("");
 
   
 
@@ -180,9 +98,24 @@ function CreateApplication({ user }) {
   
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
+    getWing()
   }, []);
+
+  const getWing = async () => {
+    setLoading(true);
+    const response = await GetAllActiveWing();
+    const tempId = [];
+    response?.map((e=>{
+      tempId.push({
+        label: e.name,
+        value: e.wingId
+      })
+    }))
+    tempId?.length > 0 ? setWing(tempId) : setWing([])
+    console.log(response);
+
+    setLoading(false);
+  };
 
   
 
@@ -190,39 +123,7 @@ function CreateApplication({ user }) {
     let FormData = {
       name,
       email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      
     };
     setFormError(formValiDation(FormData));
     if (Object.keys(formValiDation(FormData)).length > 0) {
@@ -245,6 +146,11 @@ function CreateApplication({ user }) {
       setLoading(false);
     }
   };
+  const wingHandler = async(data) => {
+    const res = await GetPostsByWingId(data?.value)
+    setPost(res)
+    console.log("data=========",res)
+  }
   return (
     <MainWrapper>
       <Sidebar title="Create Application" breadcrumb={breadcrumbs}>
@@ -261,9 +167,9 @@ function CreateApplication({ user }) {
                 label="Select Wing"
                 placeholder="Select Wing"
                 value={accountType}
-                onChange={(data) => setAccountType(data)}
+                onChange={(data) => wingHandler(data)}
                 errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
+                selectOptions={wing}
               />
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
@@ -274,31 +180,7 @@ function CreateApplication({ user }) {
                 value={accountType}
                 onChange={(data) => setAccountType(data)}
                 errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="Name"
-                placeholder="name"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
-              />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="name"
-                label="Student ID"
-                placeholder="Student id"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
-                errorMessage={formError?.name}
+                selectOptions={post}
               />
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
@@ -308,8 +190,8 @@ function CreateApplication({ user }) {
                 label="FB URL"
                 placeholder="fb url"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={fbUrl}
+                onChange={(data) => setFbUrl(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -320,8 +202,8 @@ function CreateApplication({ user }) {
                 label="Current Association"
                 placeholder="true/false"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={currentAsso}
+                onChange={(data) => setCurrentAsso(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -332,8 +214,8 @@ function CreateApplication({ user }) {
                 label="Association Detail"
                 placeholder="association detail"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={assoDetail}
+                onChange={(data) => setAssoDetail(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -344,8 +226,8 @@ function CreateApplication({ user }) {
                 label="Past Experience"
                 placeholder="past experience"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={pastExp}
+                onChange={(data) => setPastExp(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -356,8 +238,8 @@ function CreateApplication({ user }) {
                 label="Reason"
                 placeholder="why"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={reason}
+                onChange={(data) => setReason(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -368,8 +250,8 @@ function CreateApplication({ user }) {
                 label="How You Serve IITS"
                 placeholder="--"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={serveIits}
+                onChange={(data) => setServeIits(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -378,10 +260,10 @@ function CreateApplication({ user }) {
                 required
                 id="name"
                 label="Strength"
-                placeholder="--"
+                placeholder="Write down your strength"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={strength}
+                onChange={(data) => setStrength(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -390,7 +272,7 @@ function CreateApplication({ user }) {
                 required
                 id="name"
                 label="Weakness"
-                placeholder="--"
+                placeholder="Write down your weakness"
                 type="text"
                 value={name}
                 onChange={(data) => setName(data)}

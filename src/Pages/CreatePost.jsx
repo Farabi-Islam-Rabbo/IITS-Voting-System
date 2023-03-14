@@ -12,11 +12,8 @@ import {
 } from "../Components";
 import { useNavigate } from "react-router-dom";
 import {
-  CreateUser,
-  GetAllUser,
-  GetPermissionList,
-  GetPermissionListByType,
-  UploadFile,
+  CreateNewPost,
+  GetAllActiveWing
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -24,8 +21,6 @@ import { Avatar } from "../common/images";
 import { toast } from "react-toastify";
 import { countries } from "../Assets/_mocks/CountryList";
 import CreatableSelectField from "../Components/Common/CreatableSelectField";
-// import ComponentLoader from "../components/Loader/ComponentLoader";
-// import { Link } from "react-router-dom";
 
 const breadcrumbs = [
   {
@@ -56,76 +51,18 @@ const accountTypes = [
   },
 ];
 
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
 
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function CreatePost({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
+  const [wing, setWing] = useState([]);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
   const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
-    label: "Business",
-    value: "business",
-  });
+  const [selectWing, setSelectedWing] = useState(null);
   const [fullName, setFullName] = useState(null);
   const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
   const [documentId, setDocumentId] = useState(null);
@@ -155,12 +92,13 @@ function CreatePost({ user }) {
   const [formError, setFormError] = useState({});
 
   const [photoLoading, setPhotoLoading] = useState(false);
-  
+  const [pageLoading, setPageLoading] = useState(false);
+
 
   const [permissionList, setPermissionList] = useState("");
   const [permission, setPermission] = useState("");
 
-  
+
 
   const formValiDation = (values) => {
     const errors = {};
@@ -175,73 +113,48 @@ function CreatePost({ user }) {
     return errors;
   };
 
-  
+
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
+    getWing()
   }, []);
+
+  const getWing = async () => {
+    setPageLoading(true);
+    const response = await GetAllActiveWing();
+    const tempId = [];
+    response?.map((e=>{
+      tempId.push({
+        label: e.name,
+        value: e.wingId
+      })
+    }))
+    tempId?.length > 0 ? setWing(tempId) : setWing([])
+    console.log(response);
+
+    setPageLoading(false);
+  };
 
   
 
   const handleSubmit = async (e) => {
     let FormData = {
       name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      wingId : selectWing?.value,
+      createdBy: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
+    console.log("adfadsf", FormData)
     setLoading(true);
-    const response = await CreateUser(FormData);
+    const response = await CreateNewPost(FormData);
     console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    toast("Post Created!", {
+      type: "success",
+    });
+    navigate(`/post`);
   };
   return (
     <MainWrapper>
@@ -250,8 +163,19 @@ function CreatePost({ user }) {
           <>
             <div className="flex items-center justify-between py-2 border-b-2">
               <span className="font-bold capitalize">
-              Post Basic Information
+                Post Basic Information
               </span>
+            </div>
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+              <SelectField
+                required
+                label="Select Wing"
+                placeholder="Select Wing"
+                value={selectWing}
+                onChange={(data) => setSelectedWing(data)}
+                errorMessage={formError?.accountType}
+                selectOptions={wing}
+              />
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
@@ -265,21 +189,11 @@ function CreatePost({ user }) {
                 errorMessage={formError?.name}
               />
             </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
-                required
-                label="Select Wing"
-                placeholder="Select Wing"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
-                errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
-              />
-            </div>
-            
-            
+
+
+
           </>
-          
+
 
           <ButtonWithLoading
             loading={loading}

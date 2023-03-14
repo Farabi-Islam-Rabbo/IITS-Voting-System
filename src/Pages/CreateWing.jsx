@@ -12,7 +12,7 @@ import {
 } from "../Components";
 import { useNavigate } from "react-router-dom";
 import {
-  CreateUser,
+  CreateNewWing,
   GetAllUser,
   GetPermissionList,
   GetPermissionListByType,
@@ -45,74 +45,7 @@ const breadcrumbs = [
   },
 ];
 
-const accountTypes = [
-  {
-    label: "Personal",
-    value: "personal",
-  },
-  {
-    label: "Business",
-    value: "business",
-  },
-];
 
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
-
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function CreateWing({ user }) {
   const navigate = useNavigate();
@@ -126,52 +59,16 @@ function CreateWing({ user }) {
     label: "Business",
     value: "business",
   });
-  const [fullName, setFullName] = useState(null);
-  const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
-  const [documentId, setDocumentId] = useState(null);
-  const [documentIssueDate, setDocumentIssueDate] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [contactNumber, setContactNumber] = useState(null);
-  const [city, setCity] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [placeOfBirth, setPlaceOfBirth] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [country, setCountry] = useState(null);
-  const [documentExpireDate, setDocumentExpireDate] = useState(null);
-  const [referencePersonId, setReferencePersonId] = useState(null);
-  const [referencePersonName, setReferencePersonName] = useState(null);
-  const [referencePersonRelation, setReferencePersonRelation] = useState(null);
-  const [organizationName, setOrganizationName] = useState(null);
-  const [orgBankAccountNo, setOrgBankAccountNo] = useState(null);
-  const [recordNumber, setRecordNumber] = useState(null);
-  const [businessEmail, setBusinessEmail] = useState(null);
-  const [businessClass, setBusinessClass] = useState(null);
-  const [segment, setSegment] = useState(null);
-  const [businessType, setBusinessType] = useState(null);
-  const [licenseNumber, setLicenseNumber] = useState(null);
-  const [licenseIssueDate, setLicenseIssueDate] = useState(null);
-  const [licenseExpireDate, setLicenseExpireDate] = useState(null);
+  
   const [formError, setFormError] = useState({});
 
-  const [photoLoading, setPhotoLoading] = useState(false);
   
-
-  const [permissionList, setPermissionList] = useState("");
-  const [permission, setPermission] = useState("");
 
   
 
   const formValiDation = (values) => {
     const errors = {};
     if (!values.name) errors.name = "Name is Required";
-    if (!values.email) errors.email = "Email is Required!";
-
-    if (!values.accountType) errors.accountType = "Please Select Account Type!";
-    if (!values.permission) errors.permission = "Please Select a permission!";
-
-    if (photoLoading) errors.photoLoading = "Photo is uploading, Please Wait!";
-
     return errors;
   };
 
@@ -187,61 +84,20 @@ function CreateWing({ user }) {
   const handleSubmit = async (e) => {
     let FormData = {
       name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      createdBy: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await CreateUser(FormData);
+    const response = await CreateNewWing(FormData);
     console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    setLoading(false);
+    toast("Wing Created!", {
+      type: "success",
+    });
+    navigate(`/wing`);
   };
   return (
     <MainWrapper>

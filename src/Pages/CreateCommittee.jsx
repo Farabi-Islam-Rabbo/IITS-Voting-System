@@ -12,7 +12,7 @@ import {
 } from "../Components";
 import { useNavigate } from "react-router-dom";
 import {
-  CreateUser,
+  CreateNewCommittee,
   GetAllUser,
   GetPermissionList,
   GetPermissionListByType,
@@ -45,74 +45,6 @@ const breadcrumbs = [
   },
 ];
 
-const accountTypes = [
-  {
-    label: "Personal",
-    value: "personal",
-  },
-  {
-    label: "Business",
-    value: "business",
-  },
-];
-
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
-
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function CreateCommittee({ user }) {
   const navigate = useNavigate();
@@ -131,7 +63,11 @@ function CreateCommittee({ user }) {
   const [documentId, setDocumentId] = useState(null);
   const [documentIssueDate, setDocumentIssueDate] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [applicationStart, setApplicationStart] = useState(null);
+  const [applicationEnd, setApplicationEnd] = useState(null);
+  const [voteStart, setVoteStart] = useState(null);
+  const [voteEnd, setVoteEnd] = useState(null);
+  const [paymentStart, setPaymentStart] = useState(null);
   const [contactNumber, setContactNumber] = useState(null);
   const [city, setCity] = useState(null);
   const [gender, setGender] = useState(null);
@@ -186,62 +122,25 @@ function CreateCommittee({ user }) {
 
   const handleSubmit = async (e) => {
     let FormData = {
-      name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      committeeName: name,
+      applicationStartDate : applicationStart,
+      applicationEndDate: applicationEnd,
+      votingStartDate: voteStart,
+      votingEndDate: voteEnd,
+      paymentEndDate: paymentStart
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    console.log("data", FormData)
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    const response = await CreateNewCommittee(FormData);
+    setLoading(false);
+    toast("Committee Updated!", {
+      type: "success",
+    });
+    navigate(`/committee`);
   };
   return (
     <MainWrapper>
@@ -272,8 +171,8 @@ function CreateCommittee({ user }) {
                   label="Application Start Date"
                   placeholder="application start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={applicationStart}
+                  onChange={(data) => setApplicationStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -284,8 +183,8 @@ function CreateCommittee({ user }) {
                   label="Application End Date"
                   placeholder="application End date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={applicationEnd}
+                  onChange={(data) => setApplicationEnd(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -296,8 +195,8 @@ function CreateCommittee({ user }) {
                   label="Voting Start Date"
                   placeholder="voting start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={voteStart}
+                  onChange={(data) => setVoteStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -308,8 +207,8 @@ function CreateCommittee({ user }) {
                   label="Voting End Date"
                   placeholder="Voting end date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={voteEnd}
+                  onChange={(data) => setVoteEnd(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -320,8 +219,8 @@ function CreateCommittee({ user }) {
                   label="Payment Start Date"
                   placeholder="Payment start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={paymentStart}
+                  onChange={(data) => setPaymentStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>

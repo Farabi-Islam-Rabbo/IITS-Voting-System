@@ -10,13 +10,11 @@ import {
   SelectField,
   AdminSideBar,
 } from "../Components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  CreateUser,
-  GetAllUser,
-  GetPermissionList,
-  GetPermissionListByType,
-  UploadFile,
+  UpdatePosts,
+  GetPostDetailsById,
+  GetAllActiveWing
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -122,6 +120,7 @@ function UpdatePost({ user }) {
   const [password, setPassword] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
   const [nominee, setNominee] = useState(null);
+
   const [accountType, setAccountType] = useState({
     label: "Business",
     value: "business",
@@ -155,12 +154,20 @@ function UpdatePost({ user }) {
   const [formError, setFormError] = useState({});
 
   const [photoLoading, setPhotoLoading] = useState(false);
-  
+  const [refresh, setRefresh] = useState(false);
+  const [selectWing, setSelectedWing] = useState(null);
+
 
   const [permissionList, setPermissionList] = useState("");
   const [permission, setPermission] = useState("");
+  const [wing, setWing] = useState([]);
+  const [status, setStatus] = useState({
+    label: "Active",
+    value: "true",
+  });
+  const { id } = useParams();
 
-  
+
 
   const formValiDation = (values) => {
     const errors = {};
@@ -175,74 +182,78 @@ function UpdatePost({ user }) {
     return errors;
   };
 
-  
+
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
+    getWing()
   }, []);
 
-  
+  useEffect(() => {
+    if(wing?.length)
+      getPostDetailsById(id)
+  }, [wing]);
+
+  const getWing = async () => {
+    setLoading(true);
+    const response = await GetAllActiveWing();
+    console.log("allwing", response)
+    const tempId = [];
+    response?.map((e => {
+      tempId.push({
+        label: e.name,
+        value: e.wingId
+      })
+    }))
+    console.log("tempId", tempId)
+    tempId?.length > 0 ? setWing(tempId) : setWing([])
+    setRefresh(!refresh)
+    console.log("Wing",wing);
+
+    setLoading(false);
+  };
+  const getPostDetailsById = async (pId) => {
+    setLoading(true);
+    const response = await GetPostDetailsById(pId);
+    setLoading(false);
+    setSelectedWing(wing?.find((x) => x.value == response?.wingId))
+    setRefresh(!refresh)
+    setName(response?.name)
+    setStatus(statusList.find((x) => x.value == response?.isActive?.toString()))
+  };
+
+  const statusList = [
+    {
+      label: "Active",
+      value: "true",
+    },
+    {
+      label: "Inactive",
+      value: "false",
+    },
+  ];
+
 
   const handleSubmit = async (e) => {
     let FormData = {
       name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      wingId : selectWing?.value,
+      createdBy: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      isActive: status?.value == "true" ? true : false
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await CreateUser(FormData);
+    const response = await UpdatePosts(id,FormData);
+    setLoading(false);
     console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    toast("Post Updated!", {
+      type: "success",
+    });
+    navigate(`/post`);
   };
+  console.log("selectwing", selectWing)
   return (
     <MainWrapper>
       <AdminSideBar title="Update Post" breadcrumb={breadcrumbs}>
@@ -250,7 +261,7 @@ function UpdatePost({ user }) {
           <>
             <div className="flex items-center justify-between py-2 border-b-2">
               <span className="font-bold capitalize">
-              Post Basic Information
+                Post Basic Information
               </span>
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
@@ -266,20 +277,30 @@ function UpdatePost({ user }) {
               />
             </div>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-            <SelectField
+              <SelectField
                 required
                 label="Select Wing"
                 placeholder="Select Wing"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
+                value={selectWing}
+                onChange={(data) => setSelectedWing(data)}
                 errorMessage={formError?.accountType}
-                selectOptions={accountTypes}
+                selectOptions={wing}
               />
             </div>
-            
-            
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+              <SelectField
+                required
+                label="Status"
+                placeholder="Select status"
+                value={status}
+                onChange={(data) => setStatus(data)}
+                errorMessage={formError?.accountType}
+                selectOptions={statusList}
+              />
+            </div>
+
           </>
-          
+
 
           <ButtonWithLoading
             loading={loading}

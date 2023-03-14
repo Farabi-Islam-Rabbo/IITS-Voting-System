@@ -17,6 +17,7 @@ import {
   GetPermissionList,
   GetPermissionListByType,
   UploadFile,
+  CreatePrograms
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -187,61 +188,33 @@ function CreateProgram({ user }) {
   const handleSubmit = async (e) => {
     let FormData = {
       name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      createdBy: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    const response = await CreatePrograms(FormData);
+    console.log("prog res",response);
+    setLoading(false);
+    toast("Program Created!", {
+      type: "success",
+    });
+    navigate(`/program`);
+    // const { data, message, status } = response;
+    // if (status) {
+    //   toast("User Created!", {
+    //     type: "success",
+    //   });
+    //   setLoading(false);
+    //   navigate(`/users`);
+    // } else {
+    //   toast(message, {
+    //     type: "error",
+    //   });
+    //   setLoading(false);
+    // }
   };
   return (
     <MainWrapper>

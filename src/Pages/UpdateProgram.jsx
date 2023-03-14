@@ -10,13 +10,13 @@ import {
   SelectField,
   AdminSideBar,
 } from "../Components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CreateUser,
   GetAllUser,
   GetPermissionList,
-  GetPermissionListByType,
-  UploadFile,
+  UpdatePrograms,
+  GetProgramDetailsById,
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -45,74 +45,18 @@ const breadcrumbs = [
   },
 ];
 
-const accountTypes = [
+const statusList = [
   {
-    label: "Personal",
-    value: "personal",
+    label: "Active",
+    value: "true",
   },
   {
-    label: "Business",
-    value: "business",
-  },
-];
-
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
+    label: "Inactive",
+    value: "false",
   },
 ];
 
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
 
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function UpdateProgram({ user }) {
   const navigate = useNavigate();
@@ -122,9 +66,9 @@ function UpdateProgram({ user }) {
   const [password, setPassword] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
   const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
-    label: "Business",
-    value: "business",
+  const [status, setStatus] = useState({
+    label: "Active",
+    value: "true",
   });
   const [fullName, setFullName] = useState(null);
   const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
@@ -155,12 +99,13 @@ function UpdateProgram({ user }) {
   const [formError, setFormError] = useState({});
 
   const [photoLoading, setPhotoLoading] = useState(false);
-  
+
 
   const [permissionList, setPermissionList] = useState("");
   const [permission, setPermission] = useState("");
+  const { id } = useParams();
 
-  
+
 
   const formValiDation = (values) => {
     const errors = {};
@@ -175,73 +120,51 @@ function UpdateProgram({ user }) {
     return errors;
   };
 
-  
+
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
+    getProgramDetailsById(id)
   }, []);
 
-  
+  const getProgramDetailsById = async (pId) => {
+    setLoading(true);
+    const response = await GetProgramDetailsById(pId);
+    console.log("res", response);
+    setName(response?.name)
+    setStatus(statusList.find((x) => x.value == response?.isActive?.toString()))
+    setLoading(false);
+  };
 
   const handleSubmit = async (e) => {
     let FormData = {
       name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      createdBy: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      isActive: status?.value == "true" ? true : false
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
+    
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    const response = await UpdatePrograms(id,FormData);
+    
+    setLoading(false);
+    toast("Program Updated!", {
+      type: "success",
+    });
+    navigate(`/program`);
+    // const { data, message, status } = response;
+    // if (status) {
+     
+    //   setLoading(false);
+    //   navigate(`/users`);
+    // } else {
+    //   toast(message, {
+    //     type: "error",
+    //   });
+    //   setLoading(false);
+    // }
   };
   return (
     <MainWrapper>
@@ -265,9 +188,20 @@ function UpdateProgram({ user }) {
                 errorMessage={formError?.name}
               />
             </div>
-            
+            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+              <SelectField
+                required
+                label="Status"
+                placeholder="Select status"
+                value={status}
+                onChange={(data) => setStatus(data)}
+                errorMessage={formError?.accountType}
+                selectOptions={statusList}
+              />
+            </div>
+
           </>
-          
+
 
           <ButtonWithLoading
             loading={loading}

@@ -19,7 +19,7 @@ function Header(props) {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem("auth_token");
+    localStorage.removeItem("token");
   };
 
   return (

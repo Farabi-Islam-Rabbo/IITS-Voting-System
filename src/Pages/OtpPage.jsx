@@ -48,18 +48,29 @@ function OtpPage(props) {
     // }
     setLoading(true);
     const response = await VerifyOtp(FormData);
-    //const { status, message, data } = response;
+    const { status, token } = response;
 
-    //console.log(response);
+    console.log(response);
     setLoading(false);
-    if (response?.statusCode===200) {
-      navigate("/dashboard");
-    } else {
-      toast("Verification Failed", {
-        type: "error",
-      });
-      navigate("/login");
+    if(status){
+      localStorage.setItem("token",token)
+      const user = jwtDecode(token)
+      console.log("token decode====", user)
+      setUser({
+        email: "admin@gmail.com",
+        name: "Student",
+        userType: "student",
+        _id: locData?.state?.id
+      })
     }
+    // if (response?.statusCode===200) {
+    //   navigate("/dashboard");
+    // } else {
+    //   toast("Verification Failed", {
+    //     type: "error",
+    //   });
+    //   navigate("/login");
+    // }
   };
 
   const registerUser = async () => {

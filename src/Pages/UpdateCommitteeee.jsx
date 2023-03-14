@@ -10,13 +10,11 @@ import {
   SelectField,
   AdminSideBar,
 } from "../Components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CreateUser,
-  GetAllUser,
-  GetPermissionList,
-  GetPermissionListByType,
-  UploadFile,
+  UpdateCommitteee,
+  GetCommitteeDetailsById,
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -45,120 +43,19 @@ const breadcrumbs = [
   },
 ];
 
-const accountTypes = [
-  {
-    label: "Personal",
-    value: "personal",
-  },
-  {
-    label: "Business",
-    value: "business",
-  },
-];
-
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
-
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
 
 function UpdateCommittee({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [activeStatus, setActiveStatus] = useState(null);
-  const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
-    label: "Business",
-    value: "business",
-  });
-  const [fullName, setFullName] = useState(null);
-  const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
-  const [documentId, setDocumentId] = useState(null);
-  const [documentIssueDate, setDocumentIssueDate] = useState(null);
-  const [photo, setPhoto] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [contactNumber, setContactNumber] = useState(null);
-  const [city, setCity] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [placeOfBirth, setPlaceOfBirth] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [country, setCountry] = useState(null);
-  const [documentExpireDate, setDocumentExpireDate] = useState(null);
-  const [referencePersonId, setReferencePersonId] = useState(null);
-  const [referencePersonName, setReferencePersonName] = useState(null);
-  const [referencePersonRelation, setReferencePersonRelation] = useState(null);
-  const [organizationName, setOrganizationName] = useState(null);
-  const [orgBankAccountNo, setOrgBankAccountNo] = useState(null);
-  const [recordNumber, setRecordNumber] = useState(null);
-  const [businessEmail, setBusinessEmail] = useState(null);
-  const [businessClass, setBusinessClass] = useState(null);
-  const [segment, setSegment] = useState(null);
-  const [businessType, setBusinessType] = useState(null);
-  const [licenseNumber, setLicenseNumber] = useState(null);
-  const [licenseIssueDate, setLicenseIssueDate] = useState(null);
-  const [licenseExpireDate, setLicenseExpireDate] = useState(null);
   const [formError, setFormError] = useState({});
-
+  const { id } = useParams();
   const [photoLoading, setPhotoLoading] = useState(false);
-  
-
-  const [permissionList, setPermissionList] = useState("");
-  const [permission, setPermission] = useState("");
+  const [applicationStart, setApplicationStart] = useState(null);
+  const [applicationEnd, setApplicationEnd] = useState(null);
+  const [voteStart, setVoteStart] = useState(null);
+  const [voteEnd, setVoteEnd] = useState(null);
+  const [paymentStart, setPaymentStart] = useState(null);
 
   
 
@@ -178,70 +75,43 @@ function UpdateCommittee({ user }) {
   
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
+    getCommitteeDetailsById(id)
   }, []);
+
+  const getCommitteeDetailsById = async (pId) => {
+    setLoading(true);
+    const response = await GetCommitteeDetailsById(pId);
+    setLoading(false);
+    setName(response?.committeeName)
+    setApplicationStart(formateDateYYYYMMDD(new Date(response?.applicationStartDate)))
+    setApplicationEnd(formateDateYYYYMMDD(new Date(response?.applicationEndDate)))
+    setVoteStart(formateDateYYYYMMDD(new Date(response?.votingStartDate)))
+    setVoteEnd(formateDateYYYYMMDD(new Date(response?.votingEndDate)))
+    setPaymentStart(formateDateYYYYMMDD(new Date(response?.paymentEndDate)))
+  };
 
   
 
   const handleSubmit = async (e) => {
     let FormData = {
-      name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      committeeName: name,
+      applicationStartDate : applicationStart,
+      applicationEndDate: applicationEnd,
+      votingStartDate: voteStart,
+      votingEndDate: voteEnd,
+      paymentEndDate: paymentStart
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
-    const response = await CreateUser(FormData);
+    const response = await UpdateCommitteee(id,FormData);
     console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
-        type: "success",
-      });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
-      toast(message, {
-        type: "error",
-      });
-      setLoading(false);
-    }
+    toast("Committee Updated!", {
+      type: "success",
+    });
+    navigate(`/committee`);
   };
   return (
     <MainWrapper>
@@ -272,8 +142,8 @@ function UpdateCommittee({ user }) {
                   label="Application Start Date"
                   placeholder="application start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={applicationStart}
+                  onChange={(data) => setApplicationStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -284,8 +154,8 @@ function UpdateCommittee({ user }) {
                   label="Application End Date"
                   placeholder="application End date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={applicationEnd}
+                  onChange={(data) => setApplicationEnd(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -296,8 +166,8 @@ function UpdateCommittee({ user }) {
                   label="Voting Start Date"
                   placeholder="voting start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={voteStart}
+                  onChange={(data) => setVoteStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -308,8 +178,8 @@ function UpdateCommittee({ user }) {
                   label="Voting End Date"
                   placeholder="Voting end date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={voteEnd}
+                  onChange={(data) => setVoteEnd(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>
@@ -320,8 +190,8 @@ function UpdateCommittee({ user }) {
                   label="Payment Start Date"
                   placeholder="Payment start date"
                   type="date"
-                  value={dateOfBirth}
-                  onChange={(data) => setDateOfBirth(data)}
+                  value={paymentStart}
+                  onChange={(data) => setPaymentStart(data)}
                   errorMessage={formError?.dateOfBirth}
                 />
             </div>

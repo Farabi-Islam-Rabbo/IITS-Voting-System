@@ -27,22 +27,22 @@ const accessMainList = [
     url: '/admin-dashboard',
     icon: <BsReverseLayoutSidebarReverse />,
   },
-  {
-    title: 'User Type',
-    url: '/user-type',
-    icon: <BsBag />
-  },
+  // {
+  //   title: 'User Type',
+  //   url: '/user-type',
+  //   icon: <BsBag />
+  // },
   {
     title: 'Program',
     url: '/program',
     icon: <BsEye />
   },
-  {
-    title: 'Users',
-    url: '/users',
-    icon: <BsCardList />,
-    access: 'usersManagement',
-  },
+  // {
+  //   title: 'Users',
+  //   url: '/users',
+  //   icon: <BsCardList />,
+  //   access: 'usersManagement',
+  // },
   {
     title: 'Committee',
     url: '/committee',
@@ -87,8 +87,6 @@ function AdminSidebar({
   const res = accessMainList.filter(
     (item) => user?.permission?.['usersManagement'],
   )
-  console.log('res====', user?.permission?.accessList?.['usersManagement'])
-  console.log('user====', user)
   return (
     <div className="relative w-full min-h-screen px-2 md:flex">
       <div className="absolute inset-y-0 left-0 w-48 px-2 space-y-6 text-blue-100 transition duration-200 ease-in-out transform -translate-x-full bg-gray-100 sidebar py-7 md:relative md:translate-x-0">

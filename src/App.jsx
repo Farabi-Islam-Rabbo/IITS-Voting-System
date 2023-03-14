@@ -11,17 +11,30 @@ import { ToastContainer } from "react-toastify";
 
 function App({ user, setUser }) {
   useEffect(() => {
-    localStorage.clear();
-    setUser(null);
+    //localStorage.clear();
+    //setUser(null);
+    const token = localStorage.getItem("token")
+    console.log("token", token);
+    if (token) {
+      const user = jwtDecode(token)
+      console.log("token decode====", user)
+      setUser({
+        email: "admin@gmail.com",
+        name: "Student",
+        userType: "student",
+        //_id: locData?.state?.id
+      })
+    }
+
   }, []);
   return (
     <BrowserRouter>
       <Routes>
         {!user && <Route path="*" element={<Navigate to="/login" replace />} />}
-        {user && user?.userType == "sub_admin" &&(
-          <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+        {user && user?.userType == "student" && (
+          <Route path="/otp" element={<Navigate to="/dashboard" replace />} />
         )}
-        {user && user?.userType == "super_admin" &&(
+        {user && user?.userType == "super_admin" && (
           <Route path="/login" element={<Navigate to="/admin-dashboard" replace />} />
         )}
         {routes.map((route, idx) => {
