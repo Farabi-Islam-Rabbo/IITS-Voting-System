@@ -78,17 +78,17 @@ const accessMainList = [
   {
     title: 'Application',
     url: '/std-application',
-    icon: <BsCardList />
+    icon: <MdOutlineAdminPanelSettings />
   },
   {
     title: 'View Application',
     url: '/view-application',
-    icon: <BsCardList />
+    icon: <BsReply />
   },
   {
     title: 'Voting Pannel',
     url: '/voting-pannel',
-    icon: <BsCardList />
+    icon: <BsChatDots />
   }
 ]
 
@@ -109,8 +109,6 @@ function Sidebar({
   const res = accessMainList.filter(
     (item) => user?.permission?.['usersManagement'],
   )
-  console.log('res====', user?.permission?.accessList?.['usersManagement'])
-  console.log('user====', user)
   return (
     <div className="relative w-full min-h-screen px-2 md:flex">
       <div className="fixed inset-y-0 left-0 w-48 px-2 space-y-6 text-blue-100 transition duration-200 ease-in-out transform -translate-x-full bg-gray-100 sidebar py-7 md:relative md:translate-x-0">

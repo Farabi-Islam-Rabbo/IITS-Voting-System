@@ -30,7 +30,7 @@ const breadcrumbs = [
   },
   {
     id: 1,
-    name: "View Application",
+    name: "View Student",
     url: "#",
   },
   {
@@ -55,7 +55,7 @@ const statusList = [
   },
 ];
 
-function ViewApplication({ user }) {
+function ViewStudent({ user }) {
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [showRejectMessage, setShowRejectMessage] = useState(false);
@@ -83,7 +83,7 @@ function ViewApplication({ user }) {
   }, []);
   return (
     <MainWrapper>
-      <AdminSideBar title="View Application" breadcrumb={breadcrumbs}>
+      <AdminSideBar title="View Student Information" breadcrumb={breadcrumbs}>
         {pageLoading ? (
           <ComponentLoader height="300px" />
         ) : (
@@ -91,7 +91,7 @@ function ViewApplication({ user }) {
             <div className="flex flex-col md:flex-row w-full space-x-4">
               <div className="flex flex-col w-full  px-4 py-6 pt-3 mt-4 bg-white rounded md:pt-3 mx-auto">
                 <div className="flex items-center justify-between py-2 mb-4 border-b-2">
-                  <span className="font-bold capitalize">View Application Details of {appDetails?.name?.toUpperCase()}</span>
+                  <span className="font-bold capitalize">View Student Details of {appDetails?.name?.toUpperCase()}</span>
                 </div>
                 <dl>
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -301,4 +301,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(ViewApplication);
+export default connect(mapStateToProps)(ViewStudent)

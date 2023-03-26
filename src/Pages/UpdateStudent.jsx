@@ -12,11 +12,11 @@ import {
   Sidebar,
   TextAreaField
 } from "../Components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   CreateUser,
   GetAllActivePrograms,
-  GetPermissionList,
+  GetStudnetDetailsById,
   GetPermissionListByType,
   UploadFile,
 } from "../Services/allService";
@@ -48,84 +48,19 @@ const breadcrumbs = [
   },
 ];
 
-const accountTypes = [
-  {
-    label: "Cultural Wing",
-    value: "cultural wing",
-  },
-  {
-    label: "Event Wing",
-    value: "event wing",
-  },
-];
 
-const segmentList = [
-  {
-    label: "Bank",
-    value: "Bank",
-  },
-  {
-    label: "Remittence",
-    value: "Remittence",
-  },
-  {
-    label: "Insurance",
-    value: "Insurance",
-  },
-  {
-    label: "Mobile Money",
-    value: "Mobile Money",
-  },
-  {
-    label: "Others",
-    value: "Others",
-  },
-];
 
-const businessTypeList = [
-  {
-    label: "A",
-    value: "A",
-  },
-  {
-    label: "B",
-    value: "B",
-  },
-  {
-    label: "C",
-    value: "C",
-  },
-  {
-    label: "D",
-    value: "D",
-  },
-];
-
-const genders = [
-  {
-    label: "Male",
-    value: "male",
-  },
-  {
-    label: "Female",
-    value: "female",
-  },
-
-  {
-    label: "Others",
-    value: "others",
-  },
-];
-
-function CreateStudent({ user }) {
+function UpdateStudent({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
+  const [studentId, setStudentId] = useState(null);
   const [email, setEmail] = useState(null);
+  const [cgpa, setCgpa] = useState(null);
   const [password, setPassword] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
   const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
+  const [program, setProgram] = useState({
     label: "BCSE",
     value: "191aa7ab-825c-435d-a01e-174c0d4d6f1d",
   });
@@ -164,6 +99,8 @@ function CreateStudent({ user }) {
   const [permissionList, setPermissionList] = useState("");
   const [permission, setPermission] = useState("");
 
+  const { id } = useParams();
+
 
 
   const formValiDation = (values) => {
@@ -182,8 +119,6 @@ function CreateStudent({ user }) {
 
 
   useEffect(() => {
-    //getAllUsers();
-    //getPermissions();
     GetActivePrograms()
   }, []);
 
@@ -195,42 +130,12 @@ function CreateStudent({ user }) {
       email,
       password,
       userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
+      
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    // setFormError(formValiDation(FormData));
+    // if (Object.keys(formValiDation(FormData)).length > 0) {
+    //   return;
+    // }
     setLoading(true);
     const response = await CreateUser(FormData);
     console.log(response);
@@ -260,6 +165,19 @@ function CreateStudent({ user }) {
     })
     setAllDept(dept);
     setLoading(false);
+    studentData()
+  }
+
+  const studentData = async() =>{
+    const response = await GetStudnetDetailsById(id);
+    console.log(response)
+    setName(response?.name)
+    setStudentId(response?.studentId)
+    setEmail(response?.email)
+    setContactNumber(response?.contactNo)
+    setCgpa(response?.cgpa)
+    setProgram(allDept.find((x) => x.value == response?.programId))
+    setAddress(response?.address)
   }
 
   const uploadPhoto = async (files) => {
@@ -282,7 +200,7 @@ function CreateStudent({ user }) {
   };
   return (
     <MainWrapper>
-      <AdminSideBar title="Create Student" breadcrumb={breadcrumbs}>
+      <AdminSideBar title="Update Student" breadcrumb={breadcrumbs}>
         <div className="flex flex-col px-4 py-6 pt-3 mt-4 bg-white rounded md:pt-3 mx-auto">
           <>
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
@@ -292,8 +210,8 @@ function CreateStudent({ user }) {
                 label="Student ID"
                 placeholder="Student id"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={studentId}
+                onChange={(data) => setStudentId(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -315,9 +233,9 @@ function CreateStudent({ user }) {
                 id="name"
                 label="Email"
                 placeholder="email"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                type="email"
+                value={email}
+                onChange={(data) => setEmail(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -328,8 +246,8 @@ function CreateStudent({ user }) {
                 label="Contact No"
                 placeholder="contact no or phone no"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={contactNumber}
+                onChange={(data) => setContactNumber(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -340,8 +258,8 @@ function CreateStudent({ user }) {
                 label="CGPA"
                 placeholder="cgpa"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={cgpa}
+                onChange={(data) => setCgpa(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -350,8 +268,8 @@ function CreateStudent({ user }) {
                 required
                 label="Select Department"
                 placeholder="Select Department"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
+                value={program}
+                onChange={(data) => setProgram(data)}
                 errorMessage={formError?.accountType}
                 selectOptions={allDept}
               />
@@ -361,10 +279,10 @@ function CreateStudent({ user }) {
                 required
                 id="name"
                 label="Address"
-                placeholder="addressl"
+                placeholder="address"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={address}
+                onChange={(data) => setAddress(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -403,4 +321,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(CreateStudent);
+export default connect(mapStateToProps)(UpdateStudent);

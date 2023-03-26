@@ -57,9 +57,9 @@ function OtpPage(props) {
       const user = jwtDecode(token)
       console.log("token decode====", user)
       setUser({
-        email: "admin@gmail.com",
-        name: "Student",
-        userType: "student",
+        name: user?.UserId,
+        userType: user?.UserType,
+        userId: user?.Id,
         _id: locData?.state?.id
       })
     }

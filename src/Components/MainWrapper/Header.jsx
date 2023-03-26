@@ -77,7 +77,7 @@ function Header(props) {
                         alt=""
                       />
                       <div className="text-left pr-3">
-                        <span className="block font-bold text-primary leading-none">
+                        <span className="block font-bold text-white leading-none ">
                           {user?.name}
                         </span>
                       </div>

@@ -15,6 +15,7 @@ import {
   GetAllUser,
   RenewLicence,
   UsersReport,
+  GetAllStudents
 } from "../Services/allService";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -37,11 +38,11 @@ const breadcrumbs = [
   },
 ];
 
-function AllCreateStudent({ user, na }) {
+function AllStudents({ user, na }) {
   const [loading, setLoading] = useState(false);
   const [licenceUpdateLoading, setLicenceUpdateLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [students, setStudents] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -69,6 +70,11 @@ function AllCreateStudent({ user, na }) {
   const AccessTableHeader = React.useMemo(
     () => [
       {
+        Header: "Id",
+        accessor: (data) => data?.studentId,
+        type: "text",
+      },
+      {
         Header: "Name",
         accessor: (data) => data?.name,
         type: "text",
@@ -79,37 +85,18 @@ function AllCreateStudent({ user, na }) {
         type: "text",
       },
       {
-        Header: "Account Type",
-        accessor: (data) => {
-          return (
-            <div className="flex text-center">
-              <span
-                className={`text-center capitalize text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.accountType === "personal"
-                    ? "bg-purple-100 text-purple-800"
-                    : "bg-golden-200 text-green-800"
-                }`}
-              >
-                {data?.accountType}
-              </span>
-            </div>
-          );
-        },
-        type: "text",
-      },
-      {
         Header: "Status",
         accessor: (data) => {
           return (
             <div className="flex text-center">
               <span
                 className={`text-center text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.activeStatus
+                  data?.isRegistered
                     ? "bg-green-100 text-green-800"
                     : "bg-red-100 text-red-800"
                 }`}
               >
-                {data?.activeStatus ? "Active" : "Inactive"}
+                {data?.isRegistered ? "Registered" : "Unregistered"}
               </span>
             </div>
           );
@@ -122,7 +109,7 @@ function AllCreateStudent({ user, na }) {
         accessor: (data) => (
           <div className="flex justify-end w-full space-x-1">
             <Link
-              to={`/transfer-history/${data?._id}`}
+              to={`/view-student/${data?._id}`}
               className="p-1 text-sm font-bold text-white bg-yellow-600 rounded hover:bg-yellow-500"
             >
               <svg
@@ -146,7 +133,7 @@ function AllCreateStudent({ user, na }) {
               </svg>
             </Link>
             <Link
-              to={`/update-user/${data?._id}`}
+              to={`/update-student/${data?.studentId}`}
               // onClick={() => toggleUpdate(data)}
               className="p-1 text-sm font-bold text-white bg-blue-600 rounded hover:bg-blue-500"
             >
@@ -211,18 +198,11 @@ function AllCreateStudent({ user, na }) {
     setLoadingDelete(false);
   };
 
-  const getAllUsers = async () => {
+  const getStudents = async () => {
     setPageLoading(true);
-    const response = await GetAllUser({
-      userType: "user",
-    });
-
+    const response = await GetAllStudents();
     console.log(response);
-
-    if (response.status) {
-      setUsers(response.data.users);
-    }
-
+    setStudents(response)
     setPageLoading(false);
   };
 
@@ -244,7 +224,7 @@ function AllCreateStudent({ user, na }) {
     }
   };
   useEffect(() => {
-    getAllUsers();
+    getStudents();
   }, []);
 
   return (
@@ -269,10 +249,10 @@ function AllCreateStudent({ user, na }) {
                   onClick={usersReport}
                 /> */}
                 <div>
-                  {users && users.length > 0 ? (
+                  {students && students?.length > 0 ? (
                     <TableComponent
                       columns={AccessTableHeader}
-                      data={users}
+                      data={students}
                       pagination
                     />
                   ) : (
@@ -303,4 +283,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(AllCreateStudent);
+export default connect(mapStateToProps)(AllStudents);

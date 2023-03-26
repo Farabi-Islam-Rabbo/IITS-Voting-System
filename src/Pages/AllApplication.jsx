@@ -12,9 +12,10 @@ import {
 } from "../Components";
 import {
   DeleteUser,
-  GetAllUser,
+  CreatePayemnt,
   RenewLicence,
   UsersReport,
+  GetAllApplication
 } from "../Services/allService";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -41,7 +42,7 @@ function AllApplication({ user, na }) {
   const [loading, setLoading] = useState(false);
   const [licenceUpdateLoading, setLicenceUpdateLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [allApplication, setAllApplication] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -69,60 +70,36 @@ function AllApplication({ user, na }) {
   const AccessTableHeader = React.useMemo(
     () => [
       {
+        Header: "Id",
+        accessor: (data) => data?.studentId,
+        type: "text",
+      },
+      {
         Header: "Name",
         accessor: (data) => data?.name,
         type: "text",
       },
       {
-        Header: "Email",
-        accessor: (data) => data?.email,
+        Header: "Wing",
+        accessor: (data) => data?.wingName,
         type: "text",
       },
       {
-        Header: "Account Type",
-        accessor: (data) => {
-          return (
-            <div className="flex text-center">
-              <span
-                className={`text-center capitalize text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.accountType === "personal"
-                    ? "bg-purple-100 text-purple-800"
-                    : "bg-golden-200 text-green-800"
-                }`}
-              >
-                {data?.accountType}
-              </span>
-            </div>
-          );
-        },
+        Header: "Post",
+        accessor: (data) => data?.postName,
         type: "text",
       },
       {
-        Header: "Status",
-        accessor: (data) => {
-          return (
-            <div className="flex text-center">
-              <span
-                className={`text-center text-xs w-auto px-4 leading-5 font-bold rounded-full ${
-                  data?.activeStatus
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
-                {data?.activeStatus ? "Active" : "Inactive"}
-              </span>
-            </div>
-          );
-        },
+        Header: "CGPA",
+        accessor: (data) => data?.cgpa,
         type: "text",
       },
-
       {
         Header: "Action",
         accessor: (data) => (
           <div className="flex justify-end w-full space-x-1">
             <Link
-              to={`/transfer-history/${data?._id}`}
+              to={`/view-application/${data?.applicationId}`}
               className="p-1 text-sm font-bold text-white bg-yellow-600 rounded hover:bg-yellow-500"
             >
               <svg
@@ -159,25 +136,22 @@ function AllApplication({ user, na }) {
                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
               </svg>
             </Link>
-            <button
-              onClick={() => toggleDelete(data)}
-              className="p-1 rounded text-sm font-bold text-white bg-red-600 hover:bg-red-500"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
+            {
+              data?.isPaid ?
+                <button
+                  //onClick={() => toggleDelete(data)}
+                  className="p-1 rounded text-sm font-bold text-white bg-green-600 hover:bg-red-500"
+                >
+                  PAID
+                </button> :
+                <button
+                  onClick={() => toggleDelete(data)}
+                  className="p-1 rounded text-sm font-bold text-white bg-red-600 hover:bg-red-500"
+                >
+                  UNPAID
+                </button>
+            }
+
           </div>
         ),
         align: "right",
@@ -187,9 +161,26 @@ function AllApplication({ user, na }) {
     []
   );
 
-  const toggleDelete = (data) => {
-    setUserToDelete(data);
-    setOpenDelete(!openDelete);
+  const toggleDelete = async(data) => {
+    const confirmed = window.confirm(`${data?.name} is applying for ${data?.wingName} Wing - ${data?.postName} \nAre you sure you want to pay for this application?`);
+    if (confirmed) {
+      const response = await CreatePayemnt({
+        applicationId: data?.applicationId,
+        isPaid: true,
+        userId: data?.userId
+      });
+      if(response?.status){
+        getAllApplication();
+        toast(`Payment Successfull for ${data?.name}`, {
+          type: "success",
+        });
+      }else{
+        toast("Failed", {
+          type: "error",
+        });
+      }
+      
+    }
   };
 
   const handleDelete = async (id) => {
@@ -211,16 +202,14 @@ function AllApplication({ user, na }) {
     setLoadingDelete(false);
   };
 
-  const getAllUsers = async () => {
+  const getAllApplication = async () => {
     setPageLoading(true);
-    const response = await GetAllUser({
-      userType: "user",
-    });
+    const response = await GetAllApplication();
 
     console.log(response);
 
-    if (response.status) {
-      setUsers(response.data.users);
+    if (response?.status) {
+      setAllApplication(response?.data);
     }
 
     setPageLoading(false);
@@ -244,7 +233,7 @@ function AllApplication({ user, na }) {
     }
   };
   useEffect(() => {
-    getAllUsers();
+    getAllApplication();
   }, []);
 
   return (
@@ -255,7 +244,7 @@ function AllApplication({ user, na }) {
         buttonHref={"/application"}
         buttonTitle="Start Application"
       >
-        
+
         {pageLoading ? (
           <ComponentLoader height="300px" />
         ) : (
@@ -269,14 +258,14 @@ function AllApplication({ user, na }) {
                   onClick={usersReport}
                 /> */}
                 <div>
-                  {users && users.length > 0 ? (
+                  {allApplication && allApplication?.length > 0 ? (
                     <TableComponent
                       columns={AccessTableHeader}
-                      data={users}
+                      data={allApplication}
                       pagination
                     />
                   ) : (
-                    <NotFound title="No Users Found" />
+                    <NotFound title="No Applications Found" />
                   )}
                 </div>
               </div>

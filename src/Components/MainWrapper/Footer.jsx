@@ -8,14 +8,14 @@ function Footer() {
         <div className="bg-blue-400">
           <div className="container flex flex-col flex-wrap px-5 py-4 mx-auto sm:flex-row">
             <p className="text-sm text-center text-white sm:text-left mx-auto">
-              © 2023 IUBAT IT SOCIETY VOTING PANEL—
+              © 2023 IITS VOTING PANEL —
               <a
-                href="https://ahmmedabir.me"
+                href="https://iubat.edu/cse"
                 rel="noopener noreferrer"
                 className="ml-1 text-white"
                 target="_blank"
               >
-                Developed By IITS
+                Developed By Department of Computer Science and Engineering, IUBAT
               </a>
             </p>
           </div>

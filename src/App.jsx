@@ -19,10 +19,10 @@ function App({ user, setUser }) {
       const user = jwtDecode(token)
       console.log("token decode====", user)
       setUser({
-        email: "admin@gmail.com",
-        name: "Student",
-        userType: "student",
-        //_id: locData?.state?.id
+        name: user?.UserId,
+        userType: user?.UserType,
+        userId: user?.Id,
+        _id: user?.UserId
       })
     }
 
@@ -31,7 +31,7 @@ function App({ user, setUser }) {
     <BrowserRouter>
       <Routes>
         {!user && <Route path="*" element={<Navigate to="/login" replace />} />}
-        {user && user?.userType == "student" && (
+        {user && user?.userType == "Student" && (
           <Route path="/otp" element={<Navigate to="/dashboard" replace />} />
         )}
         {user && user?.userType == "super_admin" && (

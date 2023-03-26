@@ -17,7 +17,7 @@ import {
   GetAllActiveWing,
   GetPostsByWingId,
   GetPermissionListByType,
-  UploadFile,
+  CreateNewApplication,
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
 import config from "../Services/api/config";
@@ -77,6 +77,8 @@ function CreateApplication({ user }) {
   const [weakness, setWeakness] = useState("");
   const [formError, setFormError] = useState({});
   const [accountType, setAccountType] = useState(null);
+  const [selectedWing, setSelectedWing] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
   
 
 
@@ -121,36 +123,41 @@ function CreateApplication({ user }) {
 
   const handleSubmit = async (e) => {
     let FormData = {
-      name,
-      email,
-      
+      committeeId: "7bf438ac-4330-435b-b490-37b577ba8ee7",
+      userId: user?.userId,
+      postId: selectedPost?.value,
+      fbURL: fbUrl,
+      pastExperience: pastExp,
+      reason,
+      serveDescription: serveIits,
+      strength,
+      weakness,
+      isCurrentAssociation: true,
+      association: currentAsso
     };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+  
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
+    const response = await CreateNewApplication(FormData);
+    setLoading(false);
     const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
+    if(status){
+      toast(message, {
         type: "success",
       });
-      setLoading(false);
-      navigate(`/users`);
-    } else {
+    }else{
       toast(message, {
         type: "error",
       });
-      setLoading(false);
     }
+    
   };
   const wingHandler = async(data) => {
     const res = await GetPostsByWingId(data?.value)
     setPost(res)
-    console.log("data=========",res)
+    setSelectedWing(data)
   }
+
+  console.log("user=====", user)
   return (
     <MainWrapper>
       <Sidebar title="Create Application" breadcrumb={breadcrumbs}>
@@ -166,7 +173,7 @@ function CreateApplication({ user }) {
                 required
                 label="Select Wing"
                 placeholder="Select Wing"
-                value={accountType}
+                value={selectedWing}
                 onChange={(data) => wingHandler(data)}
                 errorMessage={formError?.accountType}
                 selectOptions={wing}
@@ -177,8 +184,8 @@ function CreateApplication({ user }) {
                 required
                 label="Select Post"
                 placeholder="Select Post"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
+                value={selectedPost}
+                onChange={(data) => setSelectedPost(data)}
                 errorMessage={formError?.accountType}
                 selectOptions={post}
               />
@@ -248,7 +255,7 @@ function CreateApplication({ user }) {
                 required
                 id="name"
                 label="How You Serve IITS"
-                placeholder="--"
+                placeholder="Write down how you serve IITS"
                 type="text"
                 value={serveIits}
                 onChange={(data) => setServeIits(data)}
@@ -274,8 +281,8 @@ function CreateApplication({ user }) {
                 label="Weakness"
                 placeholder="Write down your weakness"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={weakness}
+                onChange={(data) => setWeakness(data)}
                 errorMessage={formError?.name}
               />
             </div>

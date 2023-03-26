@@ -12,6 +12,7 @@ export const VerifyOtp = (data) => postApi("api/Auth/VerifyOTP",data)
 // Program 
 export const CreatePrograms = (data) => postApi("api/Programs",data)
 export const GetAllPrograms = () => getApi("GetAllPrograms")
+export const GetAllActivePrograms = () => getApi("GetAllActivePrograms")
 export const GetProgramDetailsById = (id) => getApi(`api/Programs/${id}`);
 export const UpdatePrograms = (id, data) => putApi(`api/Programs/${id}`, data);
 
@@ -36,8 +37,24 @@ export const UpdatePosts = (id, data) => putApi(`api/Posts/${id}`, data);
 export const GetAllActivePost = () => getApi("GetAllActivePost")
 export const GetPostsByWingId = (id) => getApi(`api/Posts/GetPostsByWingId/${id}`)
 
+// Student
+export const CreateNewStudent = (data) => postApi("api/wings",data)
+export const GetAllStudents = () => getApi("GetAllStudent")
+export const GetStudnetDetailsById = (id) => getApi(`GetStudentById/${id}`);
+export const UpdateStudent = (id, data) => putApi(`api/wings/${id}`, data);
+
+// Application
+export const CreateNewApplication = (data) => postApi("api/Applications/CreateApplication",data)
+export const GetAllApplication = () => getApi("api/Applications/GetApplicationList")
+export const CreatePayemnt = (data) => postApi("api/Applications/CreatePayment", data)
+export const GetApplicationDetailsById = (id) => getApi(`api/Applications/GetApplicationDetails/${id}/7BF438AC-4330-435B-B490-37B577BA8EE7`);
+export const UpdateApplication = (id, data) => putApi(`api/wings/${id}`, data);
 
 
+// Voting 
+export const GetAllCandidateList = (id) => getApi(`api/Applications/GetApplicantListForVote/7BF438AC-4330-435B-B490-37B577BA8EE7/${id}`)
+export const GetCandidateList = () => getApi("api/Applications/GetApplicantListForVote/7BF438AC-4330-435B-B490-37B577BA8EE7")
+export const CreateVote = (data) => postApi("api/Applications/CreateVote",data)
 
 //auth
 export const AdminLogin = (data) => postApi("auth/admin-login", data);

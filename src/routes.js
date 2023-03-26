@@ -41,7 +41,7 @@ import AllUserType from './Pages/AllUserType'
 import CreateProgram from './Pages/CreateProgram'
 import AllProgramCreate from './Pages/AllProgramCreate'
 import CreateUserType from './Pages/CreateUserType'
-import AllCreateStudent from './Pages/AllCreateStudent'
+import AllCreateStudent from './Pages/AllStudents'
 import CreateStudent from './Pages/CreateStudent'
 import AllVotingPannel from './Pages/AllVotingPannel'
 import UpdateCommitteeee from './Pages/UpdateCommitteeee'
@@ -50,6 +50,8 @@ import UpdatePost from './Pages/UpdatePost'
 import UpdateUserType from './Pages/UpdateUserType'
 import UpdateProgram from './Pages/UpdateProgram'
 import OtpPage from './Pages/OtpPage'
+import UpdateStudent from './Pages/UpdateStudent'
+import ViewStudent from './Pages/ViewStudent'
 
 const routes = [
   {
@@ -166,6 +168,18 @@ const routes = [
     name: 'Create Student',
     component: CreateStudent,
  },
+ {
+  path: '/update-student/:id',
+  exact: true,
+  name: 'Update Student',
+  component: UpdateStudent,
+},
+{
+  path: '/view-student/:id',
+  exact: true,
+  name: 'Student',
+  component: ViewStudent,
+},
   {
     path: '/users',
     exact: true,
@@ -203,7 +217,13 @@ const routes = [
     component: AllApplication,
   },
   {
-    path: '/view-application',
+    path: '/view-application/:id',
+    exact: true,
+    name: 'Application',
+    component: ViewApplication,
+  },
+  {
+    path: '/view-app',
     exact: true,
     name: 'View Application',
     component: ViewApplication,

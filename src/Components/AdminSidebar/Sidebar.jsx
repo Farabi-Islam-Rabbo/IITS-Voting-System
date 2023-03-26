@@ -91,7 +91,7 @@ function AdminSidebar({
     <div className="relative w-full min-h-screen px-2 md:flex">
       <div className="absolute inset-y-0 left-0 w-48 px-2 space-y-6 text-blue-100 transition duration-200 ease-in-out transform -translate-x-full bg-gray-100 sidebar py-7 md:relative md:translate-x-0">
         <p key="weqqqw" className="pt-4 mb-0 text-2xl text-gray-900">
-          IITS
+          ADMIN PANEL
         </p>
         <div className="mt-0" key="weqsqqw">
           {accessMainList
