@@ -9,7 +9,7 @@ import { duckOperations } from "../Redux/Main/index";
 import { ButtonWithLoading, InputField, MainWrapper } from "../Components";
 
 import { iubat2 } from "../common/images";
-import { Login } from "../Services/allService";
+import { Login, GetAllActiveCommittee } from "../Services/allService";
 import { getParamsUrlData } from "../common/utility";
 import { toast } from "react-toastify";
 
@@ -44,13 +44,16 @@ function LoginPage(props) {
     // if (Object.keys(formValiDation(FormData)).length > 0) {
     //   return;
     // }
+    let res = await GetAllActiveCommittee()
+    
     setLoading(true);
     if(studentId == 1 && password == 1234){
       setUser({
         email: "admin@gmail.com",
         name: "ADMIN",
         userType: "super_admin",
-        _id: 1
+        _id: 1,
+        currentCommitteeId: res[0].committeeId
       })
       return;
     }

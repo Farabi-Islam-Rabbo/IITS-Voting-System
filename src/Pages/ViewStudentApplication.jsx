@@ -17,7 +17,7 @@ import {
 } from "../Components";
 
 import { Link, useParams } from "react-router-dom";
-import { GetStudnetDetailsById, GetAllActivePrograms } from "../Services/allService";
+import { GetApplicationDetailsById } from "../Services/allService";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { countries } from "../Assets/_mocks/CountryList";
@@ -30,7 +30,7 @@ const breadcrumbs = [
   },
   {
     id: 1,
-    name: "View Student",
+    name: "View Application",
     url: "#",
   },
   {
@@ -55,7 +55,7 @@ const statusList = [
   },
 ];
 
-function ViewStudent({ user }) {
+function ViewStudentApplication({ user }) {
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [showRejectMessage, setShowRejectMessage] = useState(false);
@@ -63,43 +63,28 @@ function ViewStudent({ user }) {
   let [requestStatus, setRequestStatus] = useState("");
   let [rejectMessage, setRejectMessage] = useState("");
   let [appDetails, setAppDetials] = useState({});
-  let [allDept, setAllDept] = useState([]);
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   const { id } = useParams();
   console.log("test", id);
 
   const getApplicationDetails = async () => {
     setPageLoading(true);
-    const response = await GetStudnetDetailsById(id);
+    const response = await GetApplicationDetailsById(user?.userId);
     console.log(response);
 
-    setAppDetials(response)
+    setAppDetials(response?.data)
     setPageLoading(false);
   };
 
   useEffect(() => {
     getApplicationDetails();
-    GetActivePrograms()
   }, []);
-  const GetActivePrograms = async () => {
-    setLoading(true);
-    const response = await GetAllActivePrograms(user?.userId);
-    let dept = []
-    response?.map((e) => {
-      dept.push({
-        label: e?.name,
-        value: e?.programId
-      })
-    })
-    setAllDept(dept);
-    setLoading(false);
-
-  }
+  console.log("user========",user)
   return (
     <MainWrapper>
-      <AdminSideBar title="View Student Information" breadcrumb={breadcrumbs}>
+      <Sidebar title="View Application" breadcrumb={breadcrumbs}>
         {pageLoading ? (
           <ComponentLoader height="300px" />
         ) : (
@@ -107,7 +92,7 @@ function ViewStudent({ user }) {
             <div className="flex flex-col md:flex-row w-full space-x-4">
               <div className="flex flex-col w-full  px-4 py-6 pt-3 mt-4 bg-white rounded md:pt-3 mx-auto">
                 <div className="flex items-center justify-between py-2 mb-4 border-b-2">
-                  <span className="font-bold capitalize">View Student Details of {appDetails?.name?.toUpperCase()}</span>
+                  <span className="font-bold capitalize">View Application Details of {appDetails?.name?.toUpperCase()}</span>
                 </div>
                 <dl>
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -122,16 +107,6 @@ function ViewStudent({ user }) {
                         <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                           <div className="flex w-0 flex-1 items-center">
                             <span className="ml-2 w-0 flex-1 truncate">
-                              ID:
-                            </span>
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              {appDetails?.studentId}
-                            </span>
-                          </div>
-                        </li>
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
                               Name:
                             </span>
                             <span className="ml-2 w-0 flex-1 truncate">
@@ -142,82 +117,181 @@ function ViewStudent({ user }) {
                         <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                           <div className="flex w-0 flex-1 items-center">
                             <span className="ml-2 w-0 flex-1 truncate">
-                              Email:
+                              ID:
                             </span>
                             <span className="ml-2 w-0 flex-1 truncate">
-                              {appDetails?.email}
-                            </span>
-                          </div>
-                        </li>
-
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              Contact No:
-                            </span>
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              {appDetails?.contactNo}
+                              {appDetails?.studentId}
                             </span>
                           </div>
                         </li>
                         <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                           <div className="flex w-0 flex-1 items-center">
                             <span className="ml-2 w-0 flex-1 truncate">
-                              CGPA:
+                              FB URL:
                             </span>
                             <span className="ml-2 w-0 flex-1 truncate">
-                              {appDetails?.cgpa}
+                              {appDetails?.fbURL}
                             </span>
                           </div>
                         </li>
-
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              Program:
-                            </span>
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              {allDept.find((x) => x.value == appDetails?.programId).label}
-                            </span>
-                          </div>
-                        </li>
-
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              Address:
-                            </span>
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              {appDetails?.address}
-                            </span>
-                          </div>
-                        </li>
-
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              Registered Status :
-                            </span>
-                            <span
-                              className={`text-center text-xs w-0 flex-1 px-4 leading-5 font-bold rounded-full ${appDetails?.isRegistered
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                                }`}
-                            >
-                              {appDetails?.isRegistered ? "Registered" : "Unregistered"}
-                            </span>
-                          </div>
-                        </li>
-
                       </ul>
                     </dd>
                   </div>
+
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Applied For
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                      >
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              Post:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.postName}
+                            </span>
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              Wing:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {
+                                appDetails?.wingName
+                              }
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Application Details
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                      >
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                            Past Experience:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.pastExperience}
+                            </span>
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                            How You Serve IITS:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.serveDescription}
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  
+
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Other Information
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                      >
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              Reason:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.reason}
+                            </span>
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              Strength:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.strength}
+                            </span>
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              Weekness:
+                            </span>
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              {appDetails?.weakness}
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                  {appDetails?.reSubmit && (
+                    <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                      <dt className="text-sm font-medium text-gray-500">
+                        Re-Submit Information
+                      </dt>
+                      <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                        <ul
+                          role="list"
+                          className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                        >
+                          <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                            <div className="flex w-0 flex-1 items-center">
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                Status:
+                              </span>
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                {appDetails?.reSubmit ? "RESUBMITTED" : ""}
+                              </span>
+                            </div>
+                          </li>
+                          <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                            <div className="flex w-0 flex-1 items-center">
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                Resubmitted at:
+                              </span>
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                {moment(appDetails?.reSubmittedAt).format(
+                                  "MMM DD YYYY h:mm A"
+                                )}
+                              </span>
+                            </div>
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
+                  )}
                 </dl>
               </div>
             </div>
           </>
         )}
-      </AdminSideBar>
+      </Sidebar>
     </MainWrapper>
   );
 }
@@ -228,4 +302,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(ViewStudent)
+export default connect(mapStateToProps)(ViewStudentApplication);

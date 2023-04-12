@@ -9,7 +9,7 @@ import { duckOperations } from "../Redux/Main/index";
 import { ButtonWithLoading, InputField, MainWrapper } from "../Components";
 
 import { iubat2 } from "../common/images";
-import { VerifyOtp } from "../Services/allService";
+import { VerifyOtp, GetAllActiveCommittee } from "../Services/allService";
 import { getParamsUrlData } from "../common/utility";
 import { toast } from "react-toastify";
 
@@ -47,6 +47,7 @@ function OtpPage(props) {
     //   return;
     // }
     setLoading(true);
+    let res = await GetAllActiveCommittee()
     const response = await VerifyOtp(FormData);
     const { status, token } = response;
 
@@ -60,7 +61,8 @@ function OtpPage(props) {
         name: user?.UserId,
         userType: user?.UserType,
         userId: user?.Id,
-        _id: locData?.state?.id
+        _id: locData?.state?.id,
+        currentCommitteeId: res[0].committeeId
       })
     }
     // if (response?.statusCode===200) {

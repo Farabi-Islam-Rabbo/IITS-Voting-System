@@ -82,7 +82,7 @@ const accessMainList = [
   },
   {
     title: 'View Application',
-    url: '/view-application',
+    url: '/view-app',
     icon: <BsReply />
   },
   {

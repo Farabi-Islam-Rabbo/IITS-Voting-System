@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import {
   CreateUser,
   GetAllActivePrograms,
-  GetPermissionList,
+  CreateNewStudent,
   GetPermissionListByType,
   UploadFile,
 } from "../Services/allService";
@@ -121,16 +121,17 @@ function CreateStudent({ user }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(null);
+  const [studentId, setStudentId] = useState(null);
   const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [cgpa, setCgpa] = useState(null);
   const [activeStatus, setActiveStatus] = useState(null);
   const [nominee, setNominee] = useState(null);
-  const [accountType, setAccountType] = useState({
+  const [program, setProgram] = useState({
     label: "BCSE",
     value: "191aa7ab-825c-435d-a01e-174c0d4d6f1d",
   });
   const [fullName, setFullName] = useState(null);
-  const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
+  const [imageObj, setImageObj] = useState({});
   const [documentId, setDocumentId] = useState(null);
   const [documentIssueDate, setDocumentIssueDate] = useState(null);
   const [photo, setPhoto] = useState(null);
@@ -145,16 +146,7 @@ function CreateStudent({ user }) {
   const [referencePersonId, setReferencePersonId] = useState(null);
   const [referencePersonName, setReferencePersonName] = useState(null);
   const [referencePersonRelation, setReferencePersonRelation] = useState(null);
-  const [organizationName, setOrganizationName] = useState(null);
-  const [orgBankAccountNo, setOrgBankAccountNo] = useState(null);
-  const [recordNumber, setRecordNumber] = useState(null);
-  const [businessEmail, setBusinessEmail] = useState(null);
-  const [businessClass, setBusinessClass] = useState(null);
-  const [segment, setSegment] = useState(null);
-  const [businessType, setBusinessType] = useState(null);
-  const [licenseNumber, setLicenseNumber] = useState(null);
-  const [licenseIssueDate, setLicenseIssueDate] = useState(null);
-  const [licenseExpireDate, setLicenseExpireDate] = useState(null);
+ 
   const [formError, setFormError] = useState({});
   const [allDept, setAllDept] = useState({});
 
@@ -190,59 +182,26 @@ function CreateStudent({ user }) {
 
 
   const handleSubmit = async (e) => {
-    let FormData = {
-      name,
-      email,
-      password,
-      userType: "user",
-      accountType: accountType?.value,
-      nominee: nominee?.value,
-      permission: permission?.value,
-      //personal data
-      fullName,
-      personalBankAccountNo,
-      documentId,
-      documentIssueDate,
-      photo,
-      dateOfBirth,
-      contactNumber,
-      city,
-      gender: gender?.value,
-      placeOfBirth,
-      address,
-      country: country?.value,
-      documentExpireDate,
-      referencePersonId: referencePersonId?.value,
-      referencePersonName,
-      referencePersonRelation,
-      //business data
-      organizationName,
-      orgBankAccountNo,
-      recordNumber,
-      businessEmail,
-      businessClass,
-      segment: segment?.value,
-      businessType: businessType?.value,
-      licenseNumber,
-      licenseIssueDate,
-      licenseExpireDate,
-    };
-    setFormError(formValiDation(FormData));
-    if (Object.keys(formValiDation(FormData)).length > 0) {
-      return;
-    }
+    let formData = new FormData();
+    formData.append("StudentId", studentId);
+    formData.append("Name", name);
+    formData.append("CGPA", cgpa);
+    formData.append("ProgramId", program?.value);
+    formData.append("Address", address);
+    formData.append("Email", email);
+    formData.append("ContactNo", contactNumber);
+    formData.append("CreatedBy", "7BF438AC-4330-435B-B490-37B577BA8EE7");
+    formData.append("Picture", imageObj[0]);
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
+    const response = await CreateNewStudent(formData);
+    if (response) {
+      toast("Student Created!", {
         type: "success",
       });
       setLoading(false);
-      navigate(`/users`);
+      navigate(`/student`);
     } else {
-      toast(message, {
+      toast("Failed", {
         type: "error",
       });
       setLoading(false);
@@ -264,20 +223,7 @@ function CreateStudent({ user }) {
 
   const uploadPhoto = async (files) => {
     if (files[0]) {
-      setPhotoLoading(true);
-      let formData = new FormData();
-      formData.append("file", files[0]);
-      formData.append("name", "Photo");
-      formData.append("active", true);
-
-      //const response = await UploadFile(formData);
-
-      // console.log(response);
-
-      // if (response?.status) {
-      //   setPhoto(response.data?.fileName);
-      // }
-      setPhotoLoading(false);
+      setImageObj(files)
     }
   };
   return (
@@ -291,9 +237,9 @@ function CreateStudent({ user }) {
                 id="name"
                 label="Student ID"
                 placeholder="Student id"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                type="number"
+                value={studentId}
+                onChange={(data) => setStudentId(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -315,9 +261,9 @@ function CreateStudent({ user }) {
                 id="name"
                 label="Email"
                 placeholder="email"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                type="email"
+                value={email}
+                onChange={(data) => setEmail(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -328,8 +274,8 @@ function CreateStudent({ user }) {
                 label="Contact No"
                 placeholder="contact no or phone no"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={contactNumber}
+                onChange={(data) => setContactNumber(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -339,9 +285,9 @@ function CreateStudent({ user }) {
                 id="name"
                 label="CGPA"
                 placeholder="cgpa"
-                type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                type="number"
+                value={cgpa}
+                onChange={(data) => setCgpa(data)}
                 errorMessage={formError?.name}
               />
             </div>
@@ -350,8 +296,8 @@ function CreateStudent({ user }) {
                 required
                 label="Select Department"
                 placeholder="Select Department"
-                value={accountType}
-                onChange={(data) => setAccountType(data)}
+                value={program}
+                onChange={(data) => setProgram(data)}
                 errorMessage={formError?.accountType}
                 selectOptions={allDept}
               />
@@ -363,8 +309,8 @@ function CreateStudent({ user }) {
                 label="Address"
                 placeholder="addressl"
                 type="text"
-                value={name}
-                onChange={(data) => setName(data)}
+                value={address}
+                onChange={(data) => setAddress(data)}
                 errorMessage={formError?.name}
               />
             </div>

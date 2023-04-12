@@ -17,7 +17,7 @@ import {
   CreateUser,
   GetAllActivePrograms,
   GetStudnetDetailsById,
-  GetPermissionListByType,
+  UpdateStudents,
   UploadFile,
 } from "../Services/allService";
 import { formateDateYYYYMMDD } from "../common/utility";
@@ -64,6 +64,7 @@ function UpdateStudent({ user }) {
     label: "BCSE",
     value: "191aa7ab-825c-435d-a01e-174c0d4d6f1d",
   });
+  const [imageObj, setImageObj] = useState({});
   const [fullName, setFullName] = useState(null);
   const [personalBankAccountNo, setPersonalBankAccountNo] = useState(null);
   const [documentId, setDocumentId] = useState(null);
@@ -99,7 +100,7 @@ function UpdateStudent({ user }) {
   const [permissionList, setPermissionList] = useState("");
   const [permission, setPermission] = useState("");
 
-  const { id } = useParams();
+  const { id,sId } = useParams();
 
 
 
@@ -125,29 +126,26 @@ function UpdateStudent({ user }) {
 
 
   const handleSubmit = async (e) => {
-    let FormData = {
-      name,
-      email,
-      password,
-      userType: "user",
-      
-    };
-    // setFormError(formValiDation(FormData));
-    // if (Object.keys(formValiDation(FormData)).length > 0) {
-    //   return;
-    // }
+    let formData = new FormData();
+    formData.append("StudentId", studentId);
+    formData.append("Name", name);
+    formData.append("CGPA", cgpa);
+    formData.append("ProgramId", program?.value);
+    formData.append("Address", address);
+    formData.append("Email", email);
+    formData.append("ContactNo", contactNumber);
+    formData.append("CreatedBy", "7BF438AC-4330-435B-B490-37B577BA8EE7");
+    formData.append("Picture", imageObj[0]);
     setLoading(true);
-    const response = await CreateUser(FormData);
-    console.log(response);
-    const { data, message, status } = response;
-    if (status) {
-      toast("User Created!", {
+    const response = await UpdateStudents(id,formData);
+    if (response) {
+      toast("Student Updated!", {
         type: "success",
       });
       setLoading(false);
-      navigate(`/users`);
+      navigate(`/student`);
     } else {
-      toast(message, {
+      toast("Failed", {
         type: "error",
       });
       setLoading(false);
@@ -169,7 +167,7 @@ function UpdateStudent({ user }) {
   }
 
   const studentData = async() =>{
-    const response = await GetStudnetDetailsById(id);
+    const response = await GetStudnetDetailsById(sId);
     console.log(response)
     setName(response?.name)
     setStudentId(response?.studentId)
@@ -182,20 +180,7 @@ function UpdateStudent({ user }) {
 
   const uploadPhoto = async (files) => {
     if (files[0]) {
-      setPhotoLoading(true);
-      let formData = new FormData();
-      formData.append("file", files[0]);
-      formData.append("name", "Photo");
-      formData.append("active", true);
-
-      //const response = await UploadFile(formData);
-
-      // console.log(response);
-
-      // if (response?.status) {
-      //   setPhoto(response.data?.fileName);
-      // }
-      setPhotoLoading(false);
+      setImageObj(files)
     }
   };
   return (
@@ -305,7 +290,7 @@ function UpdateStudent({ user }) {
           <ButtonWithLoading
             loading={loading}
             className="p-2 mt-8 text-lg font-bold text-white bg-primary hover:bg-green-700 rounded"
-            title="Submit Your Application"
+            title="Update Student Info"
             onClick={handleSubmit}
             type="submit"
           />

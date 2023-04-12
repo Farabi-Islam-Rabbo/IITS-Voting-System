@@ -9,6 +9,7 @@ import {
   NotFound,
   AdminSideBar,
   TableComponent,
+  InputField
 } from "../Components";
 import {
   DeleteUser,
@@ -43,6 +44,7 @@ function AllStudents({ user, na }) {
   const [licenceUpdateLoading, setLicenceUpdateLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [students, setStudents] = useState([]);
+  const [sstudents, setSstudents] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -109,7 +111,7 @@ function AllStudents({ user, na }) {
         accessor: (data) => (
           <div className="flex justify-end w-full space-x-1">
             <Link
-              to={`/view-student/${data?._id}`}
+              to={`/view-student/${data?.studentId}`}
               className="p-1 text-sm font-bold text-white bg-yellow-600 rounded hover:bg-yellow-500"
             >
               <svg
@@ -133,7 +135,7 @@ function AllStudents({ user, na }) {
               </svg>
             </Link>
             <Link
-              to={`/update-student/${data?.studentId}`}
+              to={`/update-student/${data?.id}/${data?.studentId}`}
               // onClick={() => toggleUpdate(data)}
               className="p-1 text-sm font-bold text-white bg-blue-600 rounded hover:bg-blue-500"
             >
@@ -203,6 +205,7 @@ function AllStudents({ user, na }) {
     const response = await GetAllStudents();
     console.log(response);
     setStudents(response)
+    setSstudents(response)
     setPageLoading(false);
   };
 
@@ -227,6 +230,16 @@ function AllStudents({ user, na }) {
     getStudents();
   }, []);
 
+  const idSearchHandler = (data) =>{
+    console.log("data======",data)
+    if(!data){
+      getStudents();
+    }
+    const res = sstudents.filter(student => student.studentId?.toString().includes(data.toString()));
+    setStudents(res)
+    
+  }
+
   return (
     <MainWrapper>
       <AdminSideBar
@@ -235,6 +248,20 @@ function AllStudents({ user, na }) {
         buttonHref={"/create-student"}
         buttonTitle="Create Student"
       >
+        <div className="flex mt-5">
+          <div>
+          <InputField
+                required
+                id="name"
+                label="Search By Student Id"
+                placeholder="studnet id"
+                type="text"
+                //value={fbUrl}
+                onChange={(data) => idSearchHandler(data)}
+                //errorMessage={formError?.name}
+              />
+          </div>
+        </div>
         
         {pageLoading ? (
           <ComponentLoader height="300px" />
@@ -256,7 +283,7 @@ function AllStudents({ user, na }) {
                       pagination
                     />
                   ) : (
-                    <NotFound title="No Users Found" />
+                    <NotFound title="No Studnets Found" />
                   )}
                 </div>
               </div>

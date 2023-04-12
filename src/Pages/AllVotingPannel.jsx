@@ -81,7 +81,7 @@ function AllVotingPannel({ user }) {
                           f?.applicants?.map((e, j) => (
                             <div class="bg-gray-100 w-full gap-2 flex-wrap flex items-center" key={j}>
                               <div class="w-60 p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl">
-                                <img class="h-40 object-cover rounded-xl" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" alt="" />
+                                <img class="h-40 object-cover rounded-xl" src={`../${e?.imgUrl}`} alt="" />
                                 <div class="p-2">
                                   <h2 class="font-bold text-lg mb-2 ">{e?.name}</h2>
                                   <h3>{e?.studentId}</h3>

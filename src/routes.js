@@ -52,6 +52,7 @@ import UpdateProgram from './Pages/UpdateProgram'
 import OtpPage from './Pages/OtpPage'
 import UpdateStudent from './Pages/UpdateStudent'
 import ViewStudent from './Pages/ViewStudent'
+import ViewStudentApplication from './Pages/ViewStudentApplication'
 
 const routes = [
   {
@@ -169,7 +170,7 @@ const routes = [
     component: CreateStudent,
  },
  {
-  path: '/update-student/:id',
+  path: '/update-student/:id/:sId',
   exact: true,
   name: 'Update Student',
   component: UpdateStudent,
@@ -177,7 +178,7 @@ const routes = [
 {
   path: '/view-student/:id',
   exact: true,
-  name: 'Student',
+  name: 'View Student',
   component: ViewStudent,
 },
   {
@@ -226,7 +227,7 @@ const routes = [
     path: '/view-app',
     exact: true,
     name: 'View Application',
-    component: ViewApplication,
+    component: ViewStudentApplication,
   },
   {
     path: '/user-type',

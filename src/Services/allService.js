@@ -19,6 +19,7 @@ export const UpdatePrograms = (id, data) => putApi(`api/Programs/${id}`, data);
 // Committee
 export const CreateNewCommittee = (data) => postApi("api/Committees",data)
 export const GetAllCommittee = () => getApi("GetAllCommittees")
+export const GetAllActiveCommittee = () => getApi("GetAllActiveCommittees")
 export const GetCommitteeDetailsById = (id) => getApi(`api/Committees/${id}`);
 export const UpdateCommitteee = (id, data) => putApi(`api/Committees/${id}`, data);
 
@@ -38,10 +39,10 @@ export const GetAllActivePost = () => getApi("GetAllActivePost")
 export const GetPostsByWingId = (id) => getApi(`api/Posts/GetPostsByWingId/${id}`)
 
 // Student
-export const CreateNewStudent = (data) => postApi("api/wings",data)
+export const CreateNewStudent = (data) => postApi("api/Students",data)
 export const GetAllStudents = () => getApi("GetAllStudent")
 export const GetStudnetDetailsById = (id) => getApi(`GetStudentById/${id}`);
-export const UpdateStudent = (id, data) => putApi(`api/wings/${id}`, data);
+export const UpdateStudents = (id, data) => putApi(`api/Students/${id}`, data);
 
 // Application
 export const CreateNewApplication = (data) => postApi("api/Applications/CreateApplication",data)

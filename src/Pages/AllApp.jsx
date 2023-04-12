@@ -282,7 +282,7 @@ function AllApp({ user, na }) {
                       pagination
                     />
                   ) : (
-                    <NotFound title="No Users Found" />
+                    <NotFound title="No Applications Found" />
                   )}
                 </div>
               </div>
