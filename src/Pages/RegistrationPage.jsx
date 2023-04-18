@@ -156,12 +156,13 @@ function RegistrationPage(props) {
 
   return (
     <MainWrapper hideHeader>
-      <div className="flex flex-wrap w-full">
+      <div className="flex flex-wrap w-full h-screen">
         <div className="flex flex-col w-full">
           <div className="container mx-auto">
 
             <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
                <p className="text-3xl text-center">Registration Form</p>
+               <hr className="my-2"/>
               <div className="flex flex-col pt-3 md:pt-8">
               
             
@@ -191,8 +192,76 @@ function RegistrationPage(props) {
                 selectOptions={allStudentId}
               />
               </div>
+
+              <div className="grid w-full grid-cols-2 gap-2 md:grid-cols-1 lg:grid-cols-3">
+              <InputField
+                required
+                id="student name"
+                label="Student Name"
+                placeholder="Student Name"
+                type="text"
+                value={studentDetails?.name}
+                // onChange={(data) => setPhoneNumber(data)}
+                // errorMessage={formError?.name}
+                disabled={true}
+              />
+              <InputField
+                required
+                id="student cgpa"
+                label="Student CGPA"
+                placeholder="Student CGPA"
+                type="text"
+                value={studentDetails?.cgpa}
+                // onChange={(data) => setPhoneNumber(data)}
+                // errorMessage={formError?.name}
+                disabled={true}
+              />
+               <InputField
+                required
+                id="student email"
+                label="Student E-mail"
+                placeholder="Student E-mail"
+                type="text"
+                value={studentDetails?.email}
+                // onChange={(data) => setPhoneNumber(data)}
+                // errorMessage={formError?.name}
+                disabled={true}
+              />
+              <InputField
+                required
+                id="student program"
+                label="Student Program"
+                placeholder="Student Program"
+                type="text"
+                value={studentDetails?.program}
+                // onChange={(data) => setPhoneNumber(data)}
+                // errorMessage={formError?.name}
+                disabled={true}
+              />
+              <InputField
+                required
+                id="contuct number"
+                label="Contact Number"
+                placeholder="contact number"
+                type="text"
+                value={phoneNumber}
+                onChange={(data) => setPhoneNumber(data)}
+                errorMessage={formError?.name}
+              />
+              <InputField
+                  required
+                  id="email"
+                  title="password"
+                  label="Password"
+                  placeholder="Please create a new password"
+                  type="password"
+                  value={password}
+                  onChange={(data) => setPassword(data)}
+                  errorMessage={formError?.password}
+                />
+            </div>
             
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+            {/* <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
                 <span className="mt-5">
                     Name: {studentDetails?.name}
                 </span>
@@ -212,7 +281,7 @@ function RegistrationPage(props) {
                 <span className="mt-5">
                     Program: {studentDetails?.program}
                 </span>
-            </div>
+            </div> */}
             
             
             {/* <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
@@ -228,37 +297,18 @@ function RegistrationPage(props) {
               />
             </div> */}
             
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-              <InputField
-                required
-                id="contuct number"
-                label="Contact Number"
-                placeholder="contact number"
-                type="text"
-                value={phoneNumber}
-                onChange={(data) => setPhoneNumber(data)}
-                errorMessage={formError?.name}
-              />
+            {/* <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+              
             </div>
 
             <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
-                <InputField
-                  required
-                  id="email"
-                  title="password"
-                  label="Password"
-                  placeholder="Please create a new password"
-                  type="password"
-                  value={password}
-                  onChange={(data) => setPassword(data)}
-                  errorMessage={formError?.password}
-                />
-            </div>
+                
+            </div> */}
               
 
               <ButtonWithLoading
                 loading={loading}
-                className="p-2 mt-6 text-lg font-bold text-white bg-black hover:bg-gray-700 "
+                className="p-2 mt-10 text-lg font-bold text-white bg-black hover:bg-gray-700 "
                 title="Register Here"
                 onClick={() => loginUser()}
                 type="submit"

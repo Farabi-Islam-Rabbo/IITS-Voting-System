@@ -11,7 +11,7 @@ function TextAreaField({
 }) {
   return (
     <div className="flex flex-col pt-4">
-      <label className="text-base">{label}</label>
+      <label className="text-base mb-2">{label}</label>
       <textarea
         onChange={(e) => onChange(e.target.value)}
         defaultValue={defaultValue}

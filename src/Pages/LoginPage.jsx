@@ -12,6 +12,7 @@ import { iubat2 } from "../common/images";
 import { Login, GetAllActiveCommittee } from "../Services/allService";
 import { getParamsUrlData } from "../common/utility";
 import { toast } from "react-toastify";
+import vedio from "../Assets/v.mp4"
 
 function LoginPage(props) {
   const { setUser } = props;
@@ -45,9 +46,9 @@ function LoginPage(props) {
     //   return;
     // }
     let res = await GetAllActiveCommittee()
-    
+
     setLoading(true);
-    if(studentId == 1 && password == 1234){
+    if (studentId == 1 && password == 1234) {
       setUser({
         email: "admin@gmail.com",
         name: "ADMIN",
@@ -57,7 +58,7 @@ function LoginPage(props) {
       })
       return;
     }
-    
+
     const response = await Login(FormData?.id, FormData?.pass); // API CALL 
     //const { status, message, data } = response;
 
@@ -156,13 +157,18 @@ function LoginPage(props) {
           </div>
         </div>
 
-        <div className="w-1/2 shadow-2xl">
+        <div class="w-1/2 shadow-2xl h-screen">
+          {/* <video class="h-full" autoPlay loop muted>
+            <source src={vedio} type="video/mp4" />
+          </video> */}
           <img
             alt="coursology login"
             className="hidden object-cover w-full h-screen md:block"
             src={iubat2}
           />
         </div>
+
+
       </div>
     </MainWrapper>
   );

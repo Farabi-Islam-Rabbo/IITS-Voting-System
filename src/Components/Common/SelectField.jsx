@@ -23,7 +23,7 @@ function SelectField({
 }) {
   return (
     <div className="flex flex-col pt-4">
-      <label className="text-base">{label}</label>
+      <label className="text-base mb-2">{label}</label>
       {multiSelect && (
         <div className="flex flex-wrap mb-2 gap-1 text-center items-center">
           {selectedValues?.map((item) => (

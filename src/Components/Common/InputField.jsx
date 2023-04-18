@@ -16,7 +16,7 @@ function InputField({
 }) {
   return (
     <div className="flex flex-col pt-4">
-      <label className="text-base">{label}</label>
+      <label className="text-base mb-2">{label}</label>
       <input
         {...props}
         type={type}

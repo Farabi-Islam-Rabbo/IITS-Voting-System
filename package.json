@@ -5,6 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
+    "nazir":"vite",
     "build": "vite build",
     "preview": "vite preview",
     "build-react": "react-scripts build"

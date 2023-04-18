@@ -168,7 +168,7 @@ function CreateApplication({ user }) {
                Fillup The Application Form
               </span>
             </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
+            <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
             <SelectField
                 required
                 label="Select Wing"
@@ -178,8 +178,6 @@ function CreateApplication({ user }) {
                 errorMessage={formError?.accountType}
                 selectOptions={wing}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
             <SelectField
                 required
                 label="Select Post"
@@ -189,8 +187,6 @@ function CreateApplication({ user }) {
                 errorMessage={formError?.accountType}
                 selectOptions={post}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="name"
@@ -201,8 +197,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setFbUrl(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="name"
@@ -213,8 +207,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setCurrentAsso(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <TextAreaField
                 required
                 id="name"
@@ -225,8 +217,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setAssoDetail(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <InputField
                 required
                 id="name"
@@ -237,8 +227,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setPastExp(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <TextAreaField
                 required
                 id="name"
@@ -249,8 +237,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setReason(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <TextAreaField
                 required
                 id="name"
@@ -261,8 +247,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setServeIits(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <TextAreaField
                 required
                 id="name"
@@ -273,8 +257,6 @@ function CreateApplication({ user }) {
                 onChange={(data) => setStrength(data)}
                 errorMessage={formError?.name}
               />
-            </div>
-            <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-3">
               <TextAreaField
                 required
                 id="name"
